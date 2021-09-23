@@ -150,7 +150,7 @@ function renderScreen() {
 		ctx.textAlign = "center";
 		var combostr = String(combo);
 		for (var i = 0; i < combostr.length; i++) {
-			ctx.drawImage(images.combo[Number(combostr[i])], window.innerWidth/2-images.combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*images.combo[Number(combostr[i])].width, window.innerHeight/2-images.combo[Number(combostr[i])].height/2);
+			ctx.drawImage(images.combo[Number(combostr[i])], window.innerWidth/2-images.combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*images.combo[Number(combostr[i])].width, (window.innerHeight/2-images.combo[Number(combostr[i])].height/2)+(1-s/4)*images.combo[Number(combostr[i])].height/2, images.combo[Number(combostr[i])].width, s/4*images.combo[Number(combostr[i])].height);
 		}
 		//ctx.fillText(combo, window.innerWidth/2, window.innerHeight/2)
 	} else {
