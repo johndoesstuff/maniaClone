@@ -6,6 +6,7 @@ window.keybinds = {
 	5: "er ui".split(""),
 	6: "weruio".split(""),
 	7: "wer uio".split(""),
+	7: "qweruiop".split(""),
 }
 
 window.keycolors = {
@@ -13,6 +14,7 @@ window.keycolors = {
 	5: [0,1,2,1,0],
 	6: [0,1,0,0,1,0],
 	7: [0,1,0,2,0,1,0],
+	8: [0,1,0,2,2,0,1,0],
 }
 
 window.scrollSpeed = 32;
