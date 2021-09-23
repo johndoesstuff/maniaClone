@@ -7,7 +7,7 @@ window.keybinds = {
 	6: "weruio".split(""),
 	7: "wer uio".split(""),
 	7: "qweruiop".split(""),
-}
+};
 
 window.keycolors = {
 	4: [0,1,1,0],
@@ -15,7 +15,16 @@ window.keycolors = {
 	6: [0,1,0,0,1,0],
 	7: [0,1,0,2,0,1,0],
 	8: [0,1,0,2,2,0,1,0],
-}
+};
+
+window.rankAccs = [
+	[100, "rankX"],
+	[95, "rankS"],
+	[90, "rankA"],
+	[80, "rankB"],
+	[70, "rankC"],
+	[0, "rankD"],
+];
 
 window.scrollSpeed = 32;
 window.maniaWidth = 380;
@@ -162,7 +171,13 @@ function renderScreen() {
 	ctx.fillStyle = "white";
 	ctx.textAlign = "left";
 	ctx.font = "3vw Arial"
-	ctx.fillText("Acc: " + Math.round(totalAcc/notesHit*10000)/100, window.innerWidth/8, window.innerHeight/15);
+	ctx.fillText(Math.round(totalAcc/notesHit*10000)/100 + "%", window.innerWidth/8, window.innerHeight/15);
+	var rank = rankAccs[0][1];
+	for (var i = 0; i < rankAccs.length; i++) {
+		rank = rankAccs[i][1];
+		if (totalAcc/notesHit >= rankAccs[i][0]/100) i = rankAccs.length;
+	}
+	ctx.drawImage(images[rank], window.innerWidth/8, window.innerHeight/14);
 	ctx.fillStyle = "white";
 	ctx.fillRect(0, window.innerHeight*(100-healthAnim)/100, window.innerWidth/50, window.innerHeight);
 	ctx.fillStyle = "#5eeb34";
