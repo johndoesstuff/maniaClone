@@ -2,19 +2,29 @@ var canvas = document.getElementById("c");
 var ctx = canvas.getContext("2d");
 
 window.keybinds = {
-	4: "erui".split(""),
-	5: "er ui".split(""),
-	6: "weruio".split(""),
-	7: "wer uio".split(""),
-	8: "qweruiop".split(""),
+	1: " ".split(""),
+	2: "dj".split(""),
+	3: "d j".split(""),
+	4: "dfjk".split(""),
+	5: "df jk".split(""),
+	6: "sdfjkl".split(""),
+	7: "sdf jkl".split(""),
+	8: "asdfjkl;".split(""),
+	9: "asdf jkl;".split(""),
+	10: "qwervnuiop".split(""),
 };
 
 window.keycolors = {
+	1: [0],
+	2: [0,0],
+	3: [0,2,0],
 	4: [0,1,1,0],
 	5: [0,1,2,1,0],
 	6: [0,1,0,0,1,0],
 	7: [0,1,0,2,0,1,0],
 	8: [0,1,0,2,2,0,1,0],
+	9: [0,1,0,1,2,1,0,1,0],
+	10: [0,1,0,1,0,0,1,0,1,0],
 };
 
 window.rankAccs = [
