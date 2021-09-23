@@ -6,7 +6,7 @@ window.keybinds = {
 	5: "er ui".split(""),
 	6: "weruio".split(""),
 	7: "wer uio".split(""),
-	7: "qweruiop".split(""),
+	8: "qweruiop".split(""),
 };
 
 window.keycolors = {
@@ -116,7 +116,7 @@ function renderScreen() {
 	ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
 	for (var i = 0; i < Math.min(window.loadedMap.notes.length, 100); i++) {
 		var note = window.loadedMap.notes[i];
-		ctx.fillStyle = ["#ffffff","#21d6e6","#21d6e6","#ffffff","#21d6e6","#21d6e6","#ffffff"][note.l];
+		ctx.fillStyle = ["#ffffff","#21d6e6","#e63121"][keycolors[loadedMap.general.keys][note.l]];
 		ctx.fillRect(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-audio.currentTime*1000) + (note.e ? (scrollSpeed/20)*(note.s-note.e)+noteWidth : 0) - (note.e ? (scrollSpeed/20)*(note.s-note.e)+noteWidth : noteWidth), maniaWidth/loadedMap.general.keys, note.e ? ((scrollSpeed/20)*(note.s-note.e)) : noteWidth);
 		if (note.s-audio.currentTime*1000 < -window50 && !note.triggered) {
 			window.loadedMap.notes = window.loadedMap.notes.slice(0, i).concat(window.loadedMap.notes.slice(i+1, window.loadedMap.notes.length))

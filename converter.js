@@ -12,12 +12,12 @@ function convert(e) {
 	lines.slice(lines.indexOf("[Difficulty]")).slice(1,lines.slice(lines.indexOf("[Difficulty]")).indexOf("")).map(e => {map.difficulty[e.split(":")[0]] = e.split(":").slice(1).join(":").trim()});
 	lines.slice(lines.indexOf("[HitObjects]")).slice(1,lines.slice(lines.indexOf("[HitObjects]")).indexOf("")).map(e => {
 		if ((Number(e.split(",")[3]) & 128) >> 7 & 1) mapF.notes.push({
-			l: (Number(e.split(",")[0])/64-1)/2,
+			l: ~~(Number(e.split(",")[0])*Number(map.difficulty.CircleSize)/512),
 			s: Number(e.split(",")[2]),
 			e: Number(e.split(",")[5].split(":")[0]),
 		});
 		else mapF.notes.push({
-			l: (Number(e.split(",")[0])/64-1)/2,
+			l: ~~(Number(e.split(",")[0])*Number(map.difficulty.CircleSize)/512),
 			s: Number(e.split(",")[2]),
 		});
 	});
