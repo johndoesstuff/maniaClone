@@ -188,7 +188,7 @@ for (var i = 0; i < Object.keys(keybinds).length; i++) {
 }
 
 window.onkeydown = e => {
-	if (e.key == " ") {
+	if (e.key == "Enter") {
 		if (audio.currentTime*1000+500 < loadedMap.notes[0].s) audio.currentTime = loadedMap.notes[0].s/1000-0.5
 	}
 	if (e.key == "Tab") {
