@@ -64,6 +64,11 @@ function loadMap(map) {
 	window.audio = map.audio;
 	window.maniaWidth = Math.sqrt(map.general.keys)/2*380;
 	variableSpeed = document.getElementById("variableSpeed").checked;
+	if (document.getElementById("random").checked) {
+		loadedMap.notes.forEach(e=>{e.l+=Number(loadedMap.general.keys)});
+		var rnd = Array(Number(loadedMap.general.keys)).fill(0).map((e,i)=>i).sort(e=>Math.random()-0.5);
+		loadedMap.notes.forEach(e=>{e.l = rnd[e.l-Number(loadedMap.general.keys)]});
+	}
 	window.audio.playbackRate = Number(document.getElementById("speed").value)
 	window.audio.volume = 0.1;
 	setTimeout(() => {window.audio.play()}, 500);
