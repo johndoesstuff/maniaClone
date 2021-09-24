@@ -12,9 +12,17 @@ window.keybinds = {
 	5: "df jk".split(""),
 	6: "sdfjkl".split(""),
 	7: "sdf jkl".split(""),
-	8: "asdfjkl;".split(""),
-	9: "asdf jkl;".split(""),
+	8: "qweuriop".split(""), //chromebooks have bad keyboard rollover so i need to use qweruiop instead of asdfjkl;
+	9: "qwer uiop".split(""),
 	10: "qwervnuiop".split(""),
+	11: "qwerv nuiop".split(""),
+	12: "qwerfvnjuiop".split(""),
+	13: "qwerfv njuiop".split(""),
+	14: "qawerfvnjuio;p".split(""),
+	15: "qawerfv njuio;p".split(""),
+	16: "qawserfvnjuilo;p".split(""),
+	17: "qawserfv njuilo;p".split(""),
+	18: "qawsedrfvnjukilo;p".split(""),
 };
 
 window.keycolors = {
@@ -27,7 +35,15 @@ window.keycolors = {
 	7: [0,1,0,2,0,1,0],
 	8: [0,1,0,2,2,0,1,0],
 	9: [0,1,0,1,2,1,0,1,0],
-	10: [0,1,0,1,0,0,1,0,1,0],
+	10: [0,1,2,1,0,0,1,2,1,0],
+	11: [0,1,2,1,0,2,0,1,2,1,0],
+	12: [0,1,2,1,0,1,1,0,1,2,1,0],
+	13: [0,1,2,1,0,1,2,1,0,1,2,1,0],
+	14: [0,1,2,1,0,1,2,2,1,0,1,2,1,0],
+	15: [0,1,0,1,0,1,2,1,2,1,0,1,0,1,0],
+	16: [0,1,0,1,0,1,2,1,1,2,1,0,1,0,1,0],
+	17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
+	18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 };
 
 window.rankAccs = [
@@ -46,6 +62,7 @@ window.noteWidth = 30;
 function loadMap(map) {
 	window.loadedMap = map;
 	window.audio = map.audio;
+	window.maniaWidth = Math.sqrt(map.general.keys)/2*380;
 	variableSpeed = document.getElementById("variableSpeed").checked;
 	window.audio.playbackRate = Number(document.getElementById("speed").value)
 	window.audio.volume = 0.1;
