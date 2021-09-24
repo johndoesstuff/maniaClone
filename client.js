@@ -1,6 +1,9 @@
 var canvas = document.getElementById("c");
 var ctx = canvas.getContext("2d");
 
+variableSpeedMiss = 0.98;
+variableSpeedMax = 1.005;
+
 window.keybinds = {
 	1: " ".split(""),
 	2: "dj".split(""),
@@ -36,7 +39,6 @@ window.rankAccs = [
 	[0, "rankD"],
 ];
 
-window.scrollSpeed = 32;
 window.maniaWidth = 380;
 window.bottomHeight = 100;
 window.noteWidth = 30;
@@ -44,8 +46,8 @@ window.noteWidth = 30;
 function loadMap(map) {
 	window.loadedMap = map;
 	window.audio = map.audio;
+	variableSpeed = document.getElementById("variableSpeed").checked;
 	window.audio.playbackRate = Number(document.getElementById("speed").value)
-	window.scrollSpeed /= window.audio.playbackRate;
 	window.audio.volume = 0.1;
 	setTimeout(() => {window.audio.play()}, 500);
 	renderScreen();
@@ -117,6 +119,8 @@ var combo = 0;
 var hitTimings = [];
 
 function renderScreen() {
+	window.scrollSpeed = 32;
+	window.scrollSpeed /= window.audio.playbackRate;
 	healthAnim = 0.9*healthAnim + 0.1*health;
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -132,6 +136,7 @@ function renderScreen() {
 			window.loadedMap.notes = window.loadedMap.notes.slice(0, i).concat(window.loadedMap.notes.slice(i+1, window.loadedMap.notes.length))
 			i--;
 			lastHit = "miss";
+			if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 			health -= 8;
 			combo = 0;
 			totalAcc += accMiss;
@@ -175,6 +180,9 @@ function renderScreen() {
 	} else {
 		ctx.font = "4vw Arial"
 	}
+	if (audio.currentTime*1000+audio.playbackRate*1000 < loadedMap.notes[0].s) {
+		ctx.drawImage(images.skip, window.innerWidth-images.skip.width, window.innerHeight-images.skip.height);
+	}
 	ctx.fillStyle = "white";
 	ctx.textAlign = "right";
 	ctx.fillText("x" + combo, window.innerWidth, window.innerHeight);
@@ -216,7 +224,7 @@ for (var i = 0; i < Object.keys(keybinds).length; i++) {
 
 window.onkeydown = e => {
 	if (e.key == "Enter") {
-		if (audio.currentTime*1000+500 < loadedMap.notes[0].s) audio.currentTime = loadedMap.notes[0].s/1000-0.5
+		if (audio.currentTime*1000+audio.playbackRate*500 < loadedMap.notes[0].s) audio.currentTime = loadedMap.notes[0].s/1000-1*audio.playbackRate;
 	}
 	if (e.key == "Tab") {
 		return false;
@@ -242,6 +250,7 @@ window.onkeydown = e => {
 								health += healthMax;
 								totalAcc += accMax;
 								notesHit++;
+								if (variableSpeed) audio.playbackRate *= variableSpeedMax;
 							} else {
 								lastHit = "300";
 								health += health300;
@@ -275,6 +284,7 @@ window.onkeydown = e => {
 				totalAcc += accMiss;
 				notesHit++;
 				combo = 0;
+				if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 			}
 			health = Math.max(health, 0)
 			health = Math.min(health, 100)
@@ -305,6 +315,7 @@ window.onkeyup = e => {
 							health += healthMax;
 							totalAcc += accMax;
 							notesHit++;
+							if (variableSpeed) audio.playbackRate *= variableSpeedMax;
 						} else {
 							lastHit = "300";
 							health += health300;
@@ -338,6 +349,7 @@ window.onkeyup = e => {
 			totalAcc += accMiss;
 			notesHit++;
 			combo = 0;
+			if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 		}
 		health = Math.max(health, 0)
 		health = Math.min(health, 100)
@@ -346,6 +358,7 @@ window.onkeyup = e => {
 	} else if (loadedMap.notes[noteTest].triggered) {
 		console.log(Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000));
 		lastHit = "miss";
+		if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 		health += healthMiss;
 		totalAcc += accMiss;
 		notesHit++;

@@ -3,7 +3,10 @@
 </head>
 <body style="margin:0;overflow:hidden">
 	<style>
-		body {
+		* {
+			cursor: url('cursor.png'), auto;
+		}
+		*:hover {
 			cursor: url('cursor.png'), auto;
 		}
 	</style>
@@ -15,5 +18,6 @@
 	<input id="map" type="file"></input>
 	<div id="diffs"></div>
 	<input id="speed" value="1"></input>
+	<input type="checkbox" id="variableSpeed">Variable Speed</input>
 	<script src="fileloader.js"></script>
 </body>
