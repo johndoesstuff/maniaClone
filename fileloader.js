@@ -1,21 +1,19 @@
 const model = (() => {
+	return {
+		getEntries(file, options) {
+			return (new zip.ZipReader(new zip.BlobReader(file))).getEntries(options);
+		},
+		async getURL(entry, options) {
+			return URL.createObjectURL(await entry.getData(new zip.BlobWriter(), options));
+		}
+	};
 
-		return {
-			getEntries(file, options) {
-				return (new zip.ZipReader(new zip.BlobReader(file))).getEntries(options);
-			},
-			async getURL(entry, options) {
-				return URL.createObjectURL(await entry.getData(new zip.BlobWriter(), options));
-			}
-		};
-
-	})();
+})();
 
 zip.useWebWorkers = false;
 window.maps = [];
 document.getElementById("map").onchange = async function() {
 	window.maps = [];
-	//reader = new zip.ZipReader(new zip.BlobReader(document.getElementById("map").files[0]));
 	entries = await model.getEntries(document.getElementById("map").files[0],  "utf8" );
 	if (entries.length) {
 		console.log(entries[0].filename)
@@ -55,5 +53,4 @@ document.getElementById("map").onchange = async function() {
 			maps[a].audio = new Audio(mapAudio);
 		}
 	}
-	//await reader.close();
 }
