@@ -4,7 +4,7 @@ var ctx = canvas.getContext("2d");
 variableSpeedMiss = 0.98;
 variableSpeedMax = 1.005;
 
-skin = "chocomint";
+skin = "plox";
 
 window.keybinds = {
 	1: " ".split(""),
