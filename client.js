@@ -79,6 +79,12 @@ function loadMap(map) {
 
 function makeImg(e) { var img = new Image(); img.src = e; return img; }
 
+function changeSkin(e) {
+	if (window.location.href.split("skin=")[1]) window.location.href = window.location.href.split("skin=" + skin)[0] + "skin=" + e + window.location.href.split("skin=" + skin)[1];
+	else if (window.location.href.split("?")[1]) window.location.href += "&skin=" + e;
+	else window.location.href += "?skin=" + e;
+}
+
 /*window.images = {
 	out_r : makeImg("out_r.png"),
 	out_p : makeImg("out_p.png"),
