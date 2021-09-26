@@ -4,7 +4,7 @@ var ctx = canvas.getContext("2d");
 variableSpeedMiss = 0.98;
 variableSpeedMax = 1.005;
 
-skin = "diamond";
+skin = "chocomint";
 
 window.keybinds = {
 	1: " ".split(""),
@@ -157,8 +157,6 @@ function renderScreen() {
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = skins[skin].bgColor;
 	ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
-	ctx.fillStyle = "black";
-	ctx.fillRect(window.innerWidth/2-maniaWidth/2, window.innerHeight-bottomHeight, maniaWidth, bottomHeight);
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 		//ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
 		ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
@@ -186,8 +184,6 @@ function renderScreen() {
 		}
 	}
 	if (skins[skin].keyFront) {
-		ctx.fillStyle = "black";
-		ctx.fillRect(window.innerWidth/2-maniaWidth/2, window.innerHeight-bottomHeight, maniaWidth, bottomHeight);
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			//ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
 			ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
