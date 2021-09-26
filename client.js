@@ -4,7 +4,7 @@ var ctx = canvas.getContext("2d");
 variableSpeedMiss = 0.98;
 variableSpeedMax = 1.005;
 
-skin = "quaver";
+skin = "diamond";
 
 window.keybinds = {
 	1: " ".split(""),
@@ -143,6 +143,10 @@ var combo = 0;
 var hitTimings = [];
 
 function renderScreen() {
+	var lnCanvases = Array(skins[skin].notes.length).fill(0).map(e => document.createElement("canvas"));
+	lnCanvases.forEach(e => e.width = (Math.ceil(maniaWidth/loadedMap.general.keys)));
+	lnCanvases.forEach((e, i) => e.height = Math.floor(e.width*skins[skin].notes[i].mid.height/skins[skin].notes[i].mid.width));
+	lnCanvases.forEach((e, i) => e.getContext("2d").drawImage(skins[skin].notes[i].mid, 0, 0, e.width, e.height));
 	window.scrollSpeed = 32;
 	window.scrollSpeed /= window.audio.playbackRate;
 	healthAnim = 0.9*healthAnim + 0.1*health;
@@ -150,12 +154,23 @@ function renderScreen() {
 	canvas.height = window.innerHeight;
 	ctx.fillStyle = "#000000";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = "#141414";
+	ctx.fillStyle = skins[skin].bgColor;
 	ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
+	ctx.fillStyle = "black";
+	ctx.fillRect(window.innerWidth/2-maniaWidth/2, window.innerHeight-bottomHeight, maniaWidth, bottomHeight);
+	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
+		//ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
+		ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
+	}
 	for (var i = 0; i < Math.min(window.loadedMap.notes.length, 100); i++) {
 		var note = window.loadedMap.notes[i];
-		ctx.fillStyle = skins[skin].keycolorValues[skins[skin].keycolors[loadedMap.general.keys][note.l]];
-		ctx.fillRect(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-audio.currentTime*1000) + (note.e ? (scrollSpeed/20)*(note.s-note.e)+noteWidth : 0) - (note.e ? (scrollSpeed/20)*(note.s-note.e)+noteWidth : noteWidth), maniaWidth/loadedMap.general.keys, note.e ? ((scrollSpeed/20)*(note.s-note.e)) : noteWidth);
+		ctx.fillStyle = ctx.createPattern(lnCanvases[skins[skin].keycolors[loadedMap.general.keys][note.l]], "repeat-y");
+		ctx.save();
+		ctx.translate(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, 0)
+		if (note.e) ctx.fillRect(0, window.innerHeight-(scrollSpeed/20)*(note.e-audio.currentTime*1000)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width), maniaWidth/loadedMap.general.keys, (scrollSpeed/20)*(note.e-note.s)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2);
+		ctx.restore();
+		ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-audio.currentTime*1000), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
+		ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-audio.currentTime*1000), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)
 		if (note.s-audio.currentTime*1000 < -window50 && !note.triggered) {
 			window.loadedMap.notes = window.loadedMap.notes.slice(0, i).concat(window.loadedMap.notes.slice(i+1, window.loadedMap.notes.length))
 			i--;
@@ -168,12 +183,6 @@ function renderScreen() {
 			lastHitT = audio.currentTime*1000;
 			health = Math.max(health, 0)
 		}
-	}
-	ctx.fillStyle = "black";
-	ctx.fillRect(window.innerWidth/2-maniaWidth/2, window.innerHeight-bottomHeight, maniaWidth, bottomHeight);
-	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
-		//ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
-		ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 	}
 	if (lastHitT - audio.currentTime*1000 > -500) {
 		ctx.fillStyle = ({

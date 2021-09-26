@@ -1,7 +1,7 @@
-function makeImg(e) { var img = new Image(); img.src = "skins/quaver/" + e; return img; }
+function makeImg(e) { var img = new Image(); img.src = "skins/diamond/" + e; return img; }
 
-window.skins.quaver = {
-	bgColor : "#141414",
+window.skins.diamond = {
+	bgColor : "black",
 	keycolors : {
 		1: [0],
 		2: [0,0],
@@ -25,22 +25,34 @@ window.skins.quaver = {
 	keycolorValues : ["#ffffff","#21d6e6","#e78821"],
 	keys : [
 		{
-			true: makeImg("out_p.png"),
-			false: makeImg("out_r.png"),
+			true: makeImg("keydown.png"),
+			false: makeImg("key.png"),
 		},
 		{
-			true: makeImg("in_p.png"),
-			false: makeImg("in_r.png"),
+			true: makeImg("keydown.png"),
+			false: makeImg("key.png"),
 		},
 		{
-			true: makeImg("mid_p.png"),
-			false: makeImg("mid_r.png"),
+			true: makeImg("keydown.png"),
+			false: makeImg("key.png"),
 		},
 	],
 	notes : [
-		makeImg("note_out.png"),
-		makeImg("note_in.png"),
-		makeImg("note_mid.png"),
+		{
+			note: makeImg("note.png"),
+			mid: makeImg("notemid.png"),
+			end: makeImg("notetail.png"),
+		},
+		{
+			note: makeImg("note.png"),
+			mid: makeImg("notemid.png"),
+			end: makeImg("notetail.png"),
+		},
+		{
+			note: makeImg("note.png"),
+			mid: makeImg("notemid.png"),
+			end: makeImg("notetail.png"),
+		},
 	],
 	hitMiss : makeImg("miss.png"),
 	hitMax : makeImg("max.png"),
