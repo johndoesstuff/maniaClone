@@ -4,7 +4,7 @@ var ctx = canvas.getContext("2d");
 variableSpeedMiss = 0.98;
 variableSpeedMax = 1.005;
 
-skin = "hueshift";
+skin = (window.location.href.split("skin=")[1] || "").split("&")[0] || "quaver";
 
 window.keybinds = {
 	1: " ".split(""),
@@ -148,7 +148,7 @@ function renderScreen() {
 	lnCanvases.forEach(e => e.width = (Math.ceil(maniaWidth/loadedMap.general.keys)));
 	lnCanvases.forEach((e, i) => e.height = Math.floor(e.width*skins[skin].notes[i].mid.height/skins[skin].notes[i].mid.width));
 	lnCanvases.forEach((e, i) => e.getContext("2d").drawImage(skins[skin].notes[i].mid, 0, 0, e.width, e.height));
-	window.scrollSpeed = 32;
+	window.scrollSpeed = Number((window.location.href.split("speed=")[1] || "").split("&")[0]) || 32;
 	window.scrollSpeed /= window.audio.playbackRate;
 	healthAnim = 0.9*healthAnim + 0.1*health;
 	canvas.width = window.innerWidth;
