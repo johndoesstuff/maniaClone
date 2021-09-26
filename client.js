@@ -85,6 +85,13 @@ function changeSkin(e) {
 	else window.location.href += "?skin=" + e;
 }
 
+function changeScrollSpeed(e) {
+	window.scrollSpeed = Number((window.location.href.split("speed=")[1] || "").split("&")[0]) || 32;
+	if (window.location.href.split("speed=")[1]) window.location.href = window.location.href.split("speed=" + scrollSpeed)[0] + "speed=" + e + window.location.href.split("speed=" + scrollSpeed)[1];
+	else if (window.location.href.split("?")[1]) window.location.href += "&speed=" + e;
+	else window.location.href += "?speed=" + e;
+}
+
 /*window.images = {
 	out_r : makeImg("out_r.png"),
 	out_p : makeImg("out_p.png"),

@@ -26,7 +26,7 @@
 	<script src="zip.min.js"></script>
 	<input id="map" type="file"></input>
 	<div id="diffs"></div>
-	<input id="speed" value="1"></input>
+	<input id="speed" value="1">speed</input>
 	<input type="checkbox" id="variableSpeed">Variable Speed</input>
 	<input type="checkbox" id="random">Random</input>
 	<button onclick="changeSkin('quaver')">quaver</button>
@@ -38,4 +38,6 @@
 	<button onclick="changeSkin('bit')">bit</button>
 	<button onclick="changeSkin('hueshift')">hueshift</button>
 	<script src="fileloader.js"></script>
+	<input id="scrollspeed" value="32">scroll speed</input>
+	<button onclick="changeScrollSpeed(document.getElementById('scrollspeed').value)">update</button>
 </body>
