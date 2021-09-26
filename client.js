@@ -4,6 +4,8 @@ var ctx = canvas.getContext("2d");
 variableSpeedMiss = 0.98;
 variableSpeedMax = 1.005;
 
+skin = "quaver";
+
 window.keybinds = {
 	1: " ".split(""),
 	2: "dj".split(""),
@@ -77,7 +79,7 @@ function loadMap(map) {
 
 function makeImg(e) { var img = new Image(); img.src = e; return img; }
 
-window.images = {
+/*window.images = {
 	out_r : makeImg("out_r.png"),
 	out_p : makeImg("out_p.png"),
 	in_r : makeImg("in_r.png"),
@@ -109,7 +111,7 @@ window.images = {
 		makeImg("combo-8.png"),
 		makeImg("combo-9.png"),
 	],
-}
+}*/
 
 window.recF = 0;
 
@@ -152,7 +154,7 @@ function renderScreen() {
 	ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
 	for (var i = 0; i < Math.min(window.loadedMap.notes.length, 100); i++) {
 		var note = window.loadedMap.notes[i];
-		ctx.fillStyle = ["#ffffff","#21d6e6","#e78821"][keycolors[loadedMap.general.keys][note.l]];
+		ctx.fillStyle = skins[skin].keycolorValues[skins[skin].keycolors[loadedMap.general.keys][note.l]];
 		ctx.fillRect(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-audio.currentTime*1000) + (note.e ? (scrollSpeed/20)*(note.s-note.e)+noteWidth : 0) - (note.e ? (scrollSpeed/20)*(note.s-note.e)+noteWidth : noteWidth), maniaWidth/loadedMap.general.keys, note.e ? ((scrollSpeed/20)*(note.s-note.e)) : noteWidth);
 		if (note.s-audio.currentTime*1000 < -window50 && !note.triggered) {
 			window.loadedMap.notes = window.loadedMap.notes.slice(0, i).concat(window.loadedMap.notes.slice(i+1, window.loadedMap.notes.length))
@@ -170,7 +172,8 @@ function renderScreen() {
 	ctx.fillStyle = "black";
 	ctx.fillRect(window.innerWidth/2-maniaWidth/2, window.innerHeight-bottomHeight, maniaWidth, bottomHeight);
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
-		ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
+		//ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
+		ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 	}
 	if (lastHitT - audio.currentTime*1000 > -500) {
 		ctx.fillStyle = ({
@@ -185,25 +188,25 @@ function renderScreen() {
 		var s = (-frame/500-1)**4+4;
 		ctx.font = s + "vw Arial"
 		ctx.textAlign = "center";
-		if (lastHit == "miss") ctx.drawImage(images.hitMiss, window.innerWidth/2 - images.hitMiss.width/2, window.innerHeight/3 - images.hitMiss.height/2 + 5*(s-4))
-		if (lastHit == "Max") ctx.drawImage(images.hitMax, window.innerWidth/2 - images.hitMax.width/2, window.innerHeight/3 - images.hitMax.height/2 + 5*(s-4))
-		if (lastHit == "300") ctx.drawImage(images.hit300, window.innerWidth/2 - images.hit300.width/2, window.innerHeight/3 - images.hit300.height/2 + 5*(s-4))
-		if (lastHit == "200") ctx.drawImage(images.hit200, window.innerWidth/2 - images.hit200.width/2, window.innerHeight/3 - images.hit200.height/2 + 5*(s-4))
-		if (lastHit == "100") ctx.drawImage(images.hit100, window.innerWidth/2 - images.hit100.width/2, window.innerHeight/3 - images.hit100.height/2 + 5*(s-4))
-		if (lastHit == "50") ctx.drawImage(images.hit50, window.innerWidth/2 - images.hit50.width/2, window.innerHeight/3 - images.hit50.height/2 + 5*(s-4))
+		if (lastHit == "miss") ctx.drawImage(skins[skin].hitMiss, window.innerWidth/2 - skins[skin].hitMiss.width/2, window.innerHeight/3 - skins[skin].hitMiss.height/2 + 5*(s-4))
+		if (lastHit == "Max") ctx.drawImage(skins[skin].hitMax, window.innerWidth/2 - skins[skin].hitMax.width/2, window.innerHeight/3 - skins[skin].hitMax.height/2 + 5*(s-4))
+		if (lastHit == "300") ctx.drawImage(skins[skin].hit300, window.innerWidth/2 - skins[skin].hit300.width/2, window.innerHeight/3 - skins[skin].hit300.height/2 + 5*(s-4))
+		if (lastHit == "200") ctx.drawImage(skins[skin].hit200, window.innerWidth/2 - skins[skin].hit200.width/2, window.innerHeight/3 - skins[skin].hit200.height/2 + 5*(s-4))
+		if (lastHit == "100") ctx.drawImage(skins[skin].hit100, window.innerWidth/2 - skins[skin].hit100.width/2, window.innerHeight/3 - skins[skin].hit100.height/2 + 5*(s-4))
+		if (lastHit == "50") ctx.drawImage(skins[skin].hit50, window.innerWidth/2 - skins[skin].hit50.width/2, window.innerHeight/3 - skins[skin].hit50.height/2 + 5*(s-4))
 		//ctx.fillText(lastHit, window.innerWidth/2, window.innerHeight/2)
 		ctx.fillStyle = "white";
 		ctx.textAlign = "center";
 		var combostr = String(combo);
 		for (var i = 0; i < combostr.length; i++) {
-			ctx.drawImage(images.combo[Number(combostr[i])], window.innerWidth/2-images.combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*images.combo[Number(combostr[i])].width, (window.innerHeight/2-images.combo[Number(combostr[i])].height/2)+(1-s/4)*images.combo[Number(combostr[i])].height/2, images.combo[Number(combostr[i])].width, s/4*images.combo[Number(combostr[i])].height);
+			ctx.drawImage(skins[skin].combo[Number(combostr[i])], window.innerWidth/2-skins[skin].combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*skins[skin].combo[Number(combostr[i])].width, (window.innerHeight/2-skins[skin].combo[Number(combostr[i])].height/2)+(1-s/4)*skins[skin].combo[Number(combostr[i])].height/2, skins[skin].combo[Number(combostr[i])].width, s/4*skins[skin].combo[Number(combostr[i])].height);
 		}
 		//ctx.fillText(combo, window.innerWidth/2, window.innerHeight/2)
 	} else {
 		ctx.font = "4vw Arial"
 	}
 	if (audio.currentTime*1000+audio.playbackRate*1000 < loadedMap.notes[0].s) {
-		ctx.drawImage(images.skip, window.innerWidth-images.skip.width, window.innerHeight-images.skip.height);
+		ctx.drawImage(skins[skin].skip, window.innerWidth-skins[skin].skip.width, window.innerHeight-skins[skin].skip.height);
 	}
 	ctx.fillStyle = "white";
 	ctx.textAlign = "right";
@@ -217,7 +220,7 @@ function renderScreen() {
 		rank = rankAccs[i][1];
 		if (totalAcc/notesHit >= rankAccs[i][0]/100) i = rankAccs.length;
 	}
-	ctx.drawImage(images[rank], window.innerWidth/8, window.innerHeight/14);
+	ctx.drawImage(skins[skin][rank], window.innerWidth/8, window.innerHeight/14);
 	ctx.fillStyle = "white";
 	ctx.fillRect(0, window.innerHeight*(100-healthAnim)/100, window.innerWidth/50, window.innerHeight);
 	ctx.fillStyle = "#5eeb34";
