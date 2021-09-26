@@ -22,7 +22,7 @@ window.skins.hueshift = {
 		17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
-	offset: 1,
+	offset: 1.5,
 	widthMult: 0.9,
 	keyFront: true,
 	keys : [

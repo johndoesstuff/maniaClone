@@ -23,7 +23,7 @@ window.skins.quaver = {
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
 	keycolorValues : ["#ffffff","#21d6e6","#e78821"],
-	offset: 1.25,
+	offset: 3,
 	widthMult: 1,
 	keyFront: true,
 	keys : [

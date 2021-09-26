@@ -22,7 +22,7 @@ window.skins.plox = {
 		17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
-	offset: 0.75,
+	offset: 0.9,
 	widthMult: 1,
 	keyFront: false,
 	keys : [

@@ -22,7 +22,7 @@ window.skins.piggy = {
 		17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
-	offset: 1.5,
+	offset: 2.6,
 	widthMult: 0.8,
 	keyFront: true,
 	keys : [

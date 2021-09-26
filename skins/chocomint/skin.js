@@ -22,7 +22,7 @@ window.skins.chocomint = {
 		17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
-	offset: 0.75,
+	offset: 1,
 	widthMult: 1.25,
 	keyFront: false,
 	keys : [

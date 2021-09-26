@@ -1,7 +1,7 @@
-function makeImg(e) { var img = new Image(); img.src = "skins/bit/" + e; return img; }
+function makeImg(e) { var img = new Image(); img.src = "skins/fnf/" + e; return img; }
 
-window.skins.bit = {
-	bgColor : "black",
+window.skins.fnf = {
+	bgColor : "#222222",
 	keycolors : {
 		1: [2],
 		2: [0,3],
@@ -22,47 +22,47 @@ window.skins.bit = {
 		17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
-	offset: 1,
-	widthMult: 1,
+	offset: 0.75,
+	widthMult: 1.1,
 	keyFront: false,
 	keys : [
 		{
-			true: makeImg("left.png"),
+			true: makeImg("leftd.png"),
 			false: makeImg("left.png"),
 		},
 		{
-			true: makeImg("down.png"),
+			true: makeImg("downd.png"),
 			false: makeImg("down.png"),
 		},
 		{
-			true: makeImg("up.png"),
+			true: makeImg("upd.png"),
 			false: makeImg("up.png"),
 		},
 		{
-			true: makeImg("right.png"),
+			true: makeImg("rightd.png"),
 			false: makeImg("right.png"),
 		},
 	],
 	notes : [
 		{
-			note: makeImg("left.png"),
-			mid: makeImg("holdbody.png"),
-			end: makeImg("holdcap.png"),
+			note: makeImg("leftn.png"),
+			mid: makeImg("hold_left.png"),
+			end: makeImg("leftt.png"),
 		},
 		{
-			note: makeImg("down.png"),
-			mid: makeImg("holdbody.png"),
-			end: makeImg("holdcap.png"),
+			note: makeImg("downn.png"),
+			mid: makeImg("hold_down.png"),
+			end: makeImg("downt.png"),
 		},
 		{
-			note: makeImg("up.png"),
-			mid: makeImg("holdbody.png"),
-			end: makeImg("holdcap.png"),
+			note: makeImg("upn.png"),
+			mid: makeImg("hold_up.png"),
+			end: makeImg("upt.png"),
 		},
 		{
-			note: makeImg("right.png"),
-			mid: makeImg("holdbody.png"),
-			end: makeImg("holdcap.png"),
+			note: makeImg("rightn.png"),
+			mid: makeImg("hold_right.png"),
+			end: makeImg("rightt.png"),
 		},
 	],
 	hitMiss : makeImg("miss.png"),
@@ -79,15 +79,15 @@ window.skins.bit = {
 	rankC : makeImg("rank_c.png"),
 	rankD : makeImg("rank_d.png"),
 	combo : [
-		makeImg("score-0.png"),
-		makeImg("score-1.png"),
-		makeImg("score-2.png"),
-		makeImg("score-3.png"),
-		makeImg("score-4.png"),
-		makeImg("score-5.png"),
-		makeImg("score-6.png"),
-		makeImg("score-7.png"),
-		makeImg("score-8.png"),
-		makeImg("score-9.png"),
+		makeImg("num-0.png"),
+		makeImg("num-1.png"),
+		makeImg("num-2.png"),
+		makeImg("num-3.png"),
+		makeImg("num-4.png"),
+		makeImg("num-5.png"),
+		makeImg("num-6.png"),
+		makeImg("num-7.png"),
+		makeImg("num-8.png"),
+		makeImg("num-9.png"),
 	],
 }
