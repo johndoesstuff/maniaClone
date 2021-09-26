@@ -1,0 +1,93 @@
+function makeImg(e) { var img = new Image(); img.src = "skins/bit/" + e; return img; }
+
+window.skins.bit = {
+	bgColor : "black",
+	keycolors : {
+		1: [2],
+		2: [0,3],
+		3: [0,2,3],
+		4: [0,1,2,3],
+		5: [0,1,2,3,0],
+		6: [0,1,2,3,0,1],
+		7: [0,1,2,3,0,1,2],
+		8: [0,1,2,3,0,1,2,3],
+		9: [0,1,2,3,0,1,2,3,0],
+		10: [0,1,2,3,0,1,2,3,0,1],
+		11: [0,1,2,1,0,2,0,1,2,1,0], //i really cant be bothered
+		12: [0,1,2,1,0,1,1,0,1,2,1,0],
+		13: [0,1,2,1,0,1,2,1,0,1,2,1,0],
+		14: [0,1,2,1,0,1,2,2,1,0,1,2,1,0],
+		15: [0,1,0,1,0,1,2,1,2,1,0,1,0,1,0],
+		16: [0,1,0,1,0,1,2,1,1,2,1,0,1,0,1,0],
+		17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
+		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
+	},
+	offset: 0.75,
+	widthMult: 1,
+	keyFront: false,
+	keys : [
+		{
+			true: makeImg("left.png"),
+			false: makeImg("left.png"),
+		},
+		{
+			true: makeImg("down.png"),
+			false: makeImg("down.png"),
+		},
+		{
+			true: makeImg("up.png"),
+			false: makeImg("up.png"),
+		},
+		{
+			true: makeImg("right.png"),
+			false: makeImg("right.png"),
+		},
+	],
+	notes : [
+		{
+			note: makeImg("left.png"),
+			mid: makeImg("holdbody.png"),
+			end: makeImg("holdcap.png"),
+		},
+		{
+			note: makeImg("down.png"),
+			mid: makeImg("holdbody.png"),
+			end: makeImg("holdcap.png"),
+		},
+		{
+			note: makeImg("up.png"),
+			mid: makeImg("holdbody.png"),
+			end: makeImg("holdcap.png"),
+		},
+		{
+			note: makeImg("right.png"),
+			mid: makeImg("holdbody.png"),
+			end: makeImg("holdcap.png"),
+		},
+	],
+	hitMiss : makeImg("miss.png"),
+	hitMax : makeImg("max.png"),
+	hit50 : makeImg("50.png"),
+	hit100 : makeImg("100.png"),
+	hit200 : makeImg("200.png"),
+	hit300 : makeImg("300.png"),
+	skip : makeImg("skip.png"),
+	rankX : makeImg("rank_x.png"),
+	rankS : makeImg("rank_s.png"),
+	rankA : makeImg("rank_a.png"),
+	rankB : makeImg("rank_b.png"),
+	rankC : makeImg("rank_c.png"),
+	rankD : makeImg("rank_d.png"),
+	combo : [
+		makeImg("score-0.png"),
+		makeImg("score-1.png"),
+		makeImg("score-2.png"),
+		makeImg("score-3.png"),
+		makeImg("score-4.png"),
+		makeImg("score-5.png"),
+		makeImg("score-6.png"),
+		makeImg("score-7.png"),
+		makeImg("score-8.png"),
+		makeImg("score-9.png"),
+	],
+}
