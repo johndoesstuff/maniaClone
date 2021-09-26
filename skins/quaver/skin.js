@@ -23,6 +23,9 @@ window.skins.quaver = {
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
 	keycolorValues : ["#ffffff","#21d6e6","#e78821"],
+	offset: 1.25,
+	widthMult: 1,
+	keyFront: true,
 	keys : [
 		{
 			true: makeImg("out_p.png"),
@@ -38,9 +41,21 @@ window.skins.quaver = {
 		},
 	],
 	notes : [
-		makeImg("note_out.png"),
-		makeImg("note_in.png"),
-		makeImg("note_mid.png"),
+		{
+			note: makeImg("note_out.png"),
+			mid: makeImg("note_out.png"),
+			end: makeImg("note_out.png"),
+		},
+		{
+			note: makeImg("note_in.png"),
+			mid: makeImg("note_in.png"),
+			end: makeImg("note_in.png"),
+		},
+		{
+			note: makeImg("note_mid.png"),
+			mid: makeImg("note_mid.png"),
+			end: makeImg("note_mid.png"),
+		},
 	],
 	hitMiss : makeImg("miss.png"),
 	hitMax : makeImg("max.png"),

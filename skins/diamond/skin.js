@@ -23,6 +23,9 @@ window.skins.diamond = {
 		18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
 	},
 	keycolorValues : ["#ffffff","#21d6e6","#e78821"],
+	offset: 0.5,
+	widthMult: 1.2,
+	keyFront: false,
 	keys : [
 		{
 			true: makeImg("keydown.png"),
