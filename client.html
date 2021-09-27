@@ -13,33 +13,109 @@
 </head>
 <body style="margin:0;overflow:hidden">
 	<style>
+		@font-face {
+			font-family: "aller";
+			src: url("allerdisplay.ttf");
+		}
 		* {
 			cursor: url('cursor.png'), auto;
 		}
 		*:hover {
 			cursor: url('cursor.png'), auto;
 		}
+		body {
+			font-family: aller;
+			background: black;
+			color: white;
+			text-align: center;
+		}
+		#map {
+			display: none;
+		}
+		#mapBtn {
+			color: white;
+			background: #1f1f1f;
+			padding: 2vw;
+			border-radius: 2vw;
+			font-size: 4vw;
+		}
+		#mapBtn:hover {
+			background: #282828;
+		}
+		#title {
+			font-size: 3vw;
+		}
+		#me {
+			font-size: 2vw;
+		}
+		#link {
+			font-size: 1.5vw;
+		}
+		.label {
+			font-size: 2.3vw;
+		}
+		input[type="text"] {
+			font-family: aller;
+			color: white;
+			background: #1f1f1f;
+			padding: 0.3vw;
+			border-radius: 0.5vw;
+			font-size: 1.5vw;
+			border: none;
+		}
+		input[type="text"]:hover {
+			background: #282828;
+		}
+		input[type="text"]:focus {
+			background: #282828;
+		}
+		*:focus {
+			outline: none;
+		}
+		button {
+			font-family: aller;
+			color: white;
+			background: #1f1f1f;
+			padding: 0.3vw;
+			border-radius: 0.5vw;
+			font-size: 1.5vw;
+			border: none;
+		}
+		button:hover {
+			background: #282828;
+		}
 	</style>
+	<br>
+	<div id="title">John's cool Mania clone</div>
+	<div id="me">by JohnDoesStuff (he's cool)</div>
+	<div id="link">github.com/johndoesstuff/maniaClone</div>
+	<br><br><br>
 	<canvas id="c"></canvas>
 	<script src="maptest/map.js"></script>
 	<script src="client.js"></script>
 	<script src="converter.js"></script>
 	<script src="zip.min.js"></script>
 	<input id="map" type="file"></input>
+	<label for="map" id="mapBtn">Upload osz</label>
+	<br><br><br><br>
 	<div id="diffs"></div>
-	<input id="speed" value="1">speed</input>
+	<div class="label">Speed</div>
+	<input id="speed" value="1" type="text"></input><br><br>
+	<div class="label">Mods</div>
 	<input type="checkbox" id="variableSpeed">Variable Speed</input>
-	<input type="checkbox" id="random">Random</input>
-	<button onclick="changeSkin('quaver')">quaver</button>
-	<button onclick="changeSkin('diamond')">diamond</button>
-	<button onclick="changeSkin('chocomint')">chocomint</button>
-	<button onclick="changeSkin('plox')">plox</button>
-	<button onclick="changeSkin('piggy')">piggy</button>
-	<button onclick="changeSkin('amogus')">amogus</button>
-	<button onclick="changeSkin('bit')">bit</button>
-	<button onclick="changeSkin('hueshift')">hueshift</button>
-	<button onclick="changeSkin('fnf')">fnf</button>
+	<input type="checkbox" id="random">Random</input><br><br>
+	<div class="label">Skins</div>
+	<button onclick="changeSkin('quaver')">Quaver</button>
+	<button onclick="changeSkin('diamond')">Diamond</button>
+	<button onclick="changeSkin('chocomint')">Chocomint</button>
+	<button onclick="changeSkin('plox')">Plox</button>
+	<button onclick="changeSkin('piggy')">Piggy</button>
+	<button onclick="changeSkin('amogus')">Amogus</button>
+	<button onclick="changeSkin('bit')">Bit</button>
+	<button onclick="changeSkin('hueshift')">Hueshift</button>
+	<button onclick="changeSkin('fnf')">FnF</button><br><br>
+	<div class="label">Scroll Speed</div>
 	<script src="fileloader.js"></script>
-	<input id="scrollspeed" value="32">scroll speed</input>
-	<button onclick="changeScrollSpeed(document.getElementById('scrollspeed').value)">update</button>
+	<input id="scrollspeed" value="32" type="text"></input>
+	<button onclick="changeScrollSpeed(document.getElementById('scrollspeed').value)">Update</button>
 </body>
