@@ -257,8 +257,9 @@ function renderScreen() {
 			ctx.fillStyle = "#e6ed98";
 			ctx.fillRect(window.innerWidth/2-window.innerWidth/20/window50*window300, (1/2+1/6)*window.innerHeight-window.innerHeight/200, window.innerWidth/10/window50*window300, window.innerHeight/100);
 			ctx.fillStyle = "white";
-			for (var i = 0; i < hitTimings.length; i++) {
-			ctx.fillRect(((hitTimings[i]/2/window50+1))*(window.innerWidth/10)-window.innerWidth/400+window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/32, window.innerWidth/200, window.innerHeight/16);
+			for (var i = 0; i < Math.min(hitTimings.length, 10); i++) {
+				ctx.globalAlpha = (10-i)/10;
+				ctx.fillRect(((hitTimings[i]/window50+1)/2)*(window.innerWidth/10)-window.innerWidth/400+window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/32, window.innerWidth/200, window.innerHeight/16);
 			}
 			ctx.globalAlpha = 1;
 			//ctx.fillText(combo, window.innerWidth/2, window.innerHeight/2)
@@ -470,7 +471,7 @@ window.onkeyup = e => {
 				hits50++;
 			}
 			combo++;
-			hitTimings.push(loadedMap.notes[noteTest].s-audio.currentTime*1000);
+			hitTimings.push(loadedMap.notes[noteTest].e-audio.currentTime*1000);
 			if (hitTimings.length >= 50) hitTimings.shift();
 		} else {
 			lastHit = "miss";
