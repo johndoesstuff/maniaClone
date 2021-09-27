@@ -400,8 +400,8 @@ window.onkeydown = e => {
 					hits50++;
 				}
 				combo++;
-				hitTimings.push(loadedMap.notes[noteTest].s-audio.currentTime*1000);
-				if (hitTimings.length >= 50) hitTimings.shift();
+				hitTimings.unshift(loadedMap.notes[noteTest].s-audio.currentTime*1000);
+				if (hitTimings.length >= 50) hitTimings.pop();
 			} else {
 				lastHit = "miss";
 				health += healthMiss;
@@ -471,8 +471,8 @@ window.onkeyup = e => {
 				hits50++;
 			}
 			combo++;
-			hitTimings.push(loadedMap.notes[noteTest].e-audio.currentTime*1000);
-			if (hitTimings.length >= 50) hitTimings.shift();
+			hitTimings.unshift(loadedMap.notes[noteTest].e-audio.currentTime*1000);
+			if (hitTimings.length >= 50) hitTimings.pop();
 		} else {
 			lastHit = "miss";
 			health += healthMiss;
