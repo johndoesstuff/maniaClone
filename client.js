@@ -250,7 +250,7 @@ function renderScreen() {
 				ctx.drawImage(skins[skin].combo[Number(combostr[i])], window.innerWidth/2-skins[skin].combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*skins[skin].combo[Number(combostr[i])].width, (window.innerHeight/2-skins[skin].combo[Number(combostr[i])].height/2)+(1-s/4)*skins[skin].combo[Number(combostr[i])].height/2, skins[skin].combo[Number(combostr[i])].width, s/4*skins[skin].combo[Number(combostr[i])].height);
 			}
 			ctx.globalAlpha = 1;
-			var size = window.innerWidth/10;
+			var size = window.innerWidth/8;
 			ctx.fillStyle = "#db6e6e";
 			ctx.fillRect(window.innerWidth/2-size/2/window50*missWindow, (1/2+1/6)*window.innerHeight-window.innerHeight/200, size/window50*missWindow, window.innerHeight/100);
 			ctx.fillStyle = "#986edb";
