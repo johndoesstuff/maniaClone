@@ -169,7 +169,7 @@ var hits100 = 0;
 var hits50 = 0;
 var hitsMiss = 0;
 var startT = 0;
-var globalVisualOffset = -0.4;
+var globalVisualOffset = -0.6;
 
 function renderScreen() {
 	if (ingame) {
