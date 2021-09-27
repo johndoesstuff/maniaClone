@@ -250,12 +250,19 @@ function renderScreen() {
 				ctx.drawImage(skins[skin].combo[Number(combostr[i])], window.innerWidth/2-skins[skin].combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*skins[skin].combo[Number(combostr[i])].width, (window.innerHeight/2-skins[skin].combo[Number(combostr[i])].height/2)+(1-s/4)*skins[skin].combo[Number(combostr[i])].height/2, skins[skin].combo[Number(combostr[i])].width, s/4*skins[skin].combo[Number(combostr[i])].height);
 			}
 			ctx.globalAlpha = 1;
+			var size = window.innerWidth/10;
 			ctx.fillStyle = "#db6e6e";
-			ctx.fillRect(window.innerWidth/2-window.innerWidth/20/window50*missWindow, (1/2+1/6)*window.innerHeight-window.innerHeight/200, window.innerWidth/10/window50*missWindow, window.innerHeight/100);
+			ctx.fillRect(window.innerWidth/2-size/2/window50*missWindow, (1/2+1/6)*window.innerHeight-window.innerHeight/200, size/window50*missWindow, window.innerHeight/100);
 			ctx.fillStyle = "#986edb";
-			ctx.fillRect(window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/200, window.innerWidth/10, window.innerHeight/100);
+			ctx.fillRect(window.innerWidth/2-size/2, (1/2+1/6)*window.innerHeight-window.innerHeight/200, window.innerWidth/10, window.innerHeight/100);
+			ctx.fillStyle = "#3283a8";
+			ctx.fillRect(window.innerWidth/2-size/2/window50*window100, (1/2+1/6)*window.innerHeight-window.innerHeight/200, size/window50*window100, window.innerHeight/100);
+			ctx.fillStyle = "#32a84a";
+			ctx.fillRect(window.innerWidth/2-size/2/window50*window200, (1/2+1/6)*window.innerHeight-window.innerHeight/200, size/window50*window200, window.innerHeight/100);
 			ctx.fillStyle = "#e6ed98";
-			ctx.fillRect(window.innerWidth/2-window.innerWidth/20/window50*window300, (1/2+1/6)*window.innerHeight-window.innerHeight/200, window.innerWidth/10/window50*window300, window.innerHeight/100);
+			ctx.fillRect(window.innerWidth/2-size/2/window50*window300, (1/2+1/6)*window.innerHeight-window.innerHeight/200, size/window50*window300, window.innerHeight/100);
+			ctx.fillStyle = "#cfcfcf";
+			ctx.fillRect(window.innerWidth/2-size/2/window50*windowMax, (1/2+1/6)*window.innerHeight-window.innerHeight/200, size/window50*windowMax, window.innerHeight/100);
 			ctx.fillStyle = "white";
 			for (var i = 0; i < Math.min(hitTimings.length, 10); i++) {
 				ctx.globalAlpha = (10-i)/10;
