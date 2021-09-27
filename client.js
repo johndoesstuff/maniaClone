@@ -249,6 +249,14 @@ function renderScreen() {
 			for (var i = 0; i < combostr.length; i++) {
 				ctx.drawImage(skins[skin].combo[Number(combostr[i])], window.innerWidth/2-skins[skin].combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*skins[skin].combo[Number(combostr[i])].width, (window.innerHeight/2-skins[skin].combo[Number(combostr[i])].height/2)+(1-s/4)*skins[skin].combo[Number(combostr[i])].height/2, skins[skin].combo[Number(combostr[i])].width, s/4*skins[skin].combo[Number(combostr[i])].height);
 			}
+			ctx.globalAlpha = 1;
+			ctx.fillStyle = "purple";
+			ctx.fillRect(window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/200, window.innerWidth/10, window.innerHeight/100);
+			ctx.fillStyle = "yellow";
+			ctx.fillRect(window.innerWidth/2-window.innerWidth/20/window50*window300, (1/2+1/6)*window.innerHeight-window.innerHeight/200, window.innerWidth/10/window50*window300, window.innerHeight/100);
+			ctx.fillStyle = "white";
+			ctx.fillRect(((hitTimings[hitTimings.length-1]/window50+1)/2)*(window.innerWidth/10)-window.innerWidth/400+window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/32, window.innerWidth/200, window.innerHeight/16);
+			ctx.globalAlpha = 1;
 			//ctx.fillText(combo, window.innerWidth/2, window.innerHeight/2)
 		} else {
 			ctx.font = "4vw Arial"
