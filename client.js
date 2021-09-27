@@ -285,10 +285,10 @@ function renderScreen() {
 			recF = 0;
 		}
 		if (audio.currentTime == audio.duration || !loadedMap.notes[0]) setTimeout(e => {resultsScreen = true; ingame = false}, 500);
-		ctx.globalAlpha = 0.75;
+		ctx.globalAlpha = 0.5;
 		ctx.fillStyle = "white";
 		if (audio.currentTime*1000-startT < 0) {
-			ctx.fillStyle = "lime";
+			ctx.fillStyle = "#3FE46E";
 			ctx.fillRect(0, 0, audio.currentTime*1000/startT*window.innerWidth, 10);
 		}
 		else if (loadedMap.notes[0]) ctx.fillRect(0, 0, (audio.currentTime*1000-startT)/(Math.max(loadedMap.notes[loadedMap.notes.length-1].s, loadedMap.notes[loadedMap.notes.length-1].e || 0) - startT) * window.innerWidth, 10)
