@@ -78,6 +78,7 @@ function loadMap(map) {
 	window.audio.volume = 0.1;
 	setTimeout(() => {window.audio.play()}, 500);
 	renderScreen();
+	maxCombo = 0;
 }
 
 function makeImg(e) { var img = new Image(); img.src = e; return img; }
@@ -159,9 +160,17 @@ var combo = 0;
 var hitTimings = [];
 var ingame = false;
 var resultsScreen = false;
+var maxCombo = 0;
+var hitsMax = 0;
+var hits300 = 0;
+var hits200 = 0;
+var hits100 = 0;
+var hits50 = 0;
+var hitsMiss = 0;
 
 function renderScreen() {
 	if (ingame) {
+		if (combo > maxCombo) maxCombo = combo;
 		document.body.style.overflow = "hidden";
 		document.getElementById("notCanvas").style.display = "none";
 		window.maniaWidth = skins[skin].widthMult*Math.sqrt(loadedMap.general.keys)/2*window.defaultManiaWidth;
@@ -200,6 +209,7 @@ function renderScreen() {
 				combo = 0;
 				totalAcc += accMiss;
 				notesHit++;
+				hitsMiss++;
 				lastHitT = audio.currentTime*1000;
 				health = Math.max(health, 0)
 			}
@@ -272,6 +282,7 @@ function renderScreen() {
 			if (recF > 1) console.log(recF)
 			recF = 0;
 		}
+		if (audio.currentTime == audio.duration || !loadedMap.notes[0]) setTimeout(e => {resultsScreen = true; ingame = false}, 500);
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
@@ -279,6 +290,17 @@ function renderScreen() {
 		canvas.height = window.innerHeight;
 		ctx.fillStyle = "#000000";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.textAlign = "center";
+		ctx.fillStyle = "white";
+		ctx.font = "4vw Arial";
+		ctx.fillText("Accuracy: " + Math.round(totalAcc/notesHit*10000)/100, window.innerWidth/2, 2/10*window.innerHeight);
+		ctx.fillText("Max Combo: " + maxCombo, window.innerWidth/2, 3/10*window.innerHeight);
+		ctx.fillText("Max: " + hitsMax, 1/3*window.innerWidth, 4/10*window.innerHeight);
+		ctx.fillText("300: " + hits300, 2/3*window.innerWidth, 4/10*window.innerHeight);
+		ctx.fillText("200: " + hits200, 1/3*window.innerWidth, 5/10*window.innerHeight);
+		ctx.fillText("100: " + hits100, 2/3*window.innerWidth, 5/10*window.innerHeight);
+		ctx.fillText("50: " + hits50, 1/3*window.innerWidth, 6/10*window.innerHeight);
+		ctx.fillText("Miss: " + hitsMiss, 2/3*window.innerWidth, 6/10*window.innerHeight);
 	} else {
 		canvas.width = 0;
 		canvas.height = 0;
@@ -323,30 +345,35 @@ window.onkeydown = e => {
 								health += healthMax;
 								totalAcc += accMax;
 								notesHit++;
+								hitsMax++;
 								if (variableSpeed) audio.playbackRate *= variableSpeedMax;
 							} else {
 								lastHit = "300";
 								health += health300;
 								totalAcc += acc300;
 								notesHit++;
+								hits300++;
 							}
 						} else {
 							lastHit = "200";
 							health += health200;
 							totalAcc += acc200;
 							notesHit++;
+							hits200++;
 						}
 					} else {
 						lastHit = "100";
 						health += health100;
 						totalAcc += acc100;
 						notesHit++;
+						hits100++;
 					}
 				} else {
 					lastHit = "50";
 					health += health50;
 					totalAcc += acc50;
 					notesHit++;
+					hits50++;
 				}
 				combo++;
 				hitTimings.push(loadedMap.notes[noteTest].s-audio.currentTime*1000);
@@ -356,6 +383,7 @@ window.onkeydown = e => {
 				health += healthMiss;
 				totalAcc += accMiss;
 				notesHit++;
+				hitsMiss++;
 				combo = 0;
 				if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 			}
@@ -388,30 +416,35 @@ window.onkeyup = e => {
 							health += healthMax;
 							totalAcc += accMax;
 							notesHit++;
+							hitsMax++;
 							if (variableSpeed) audio.playbackRate *= variableSpeedMax;
 						} else {
 							lastHit = "300";
 							health += health300;
 							totalAcc += acc300;
 							notesHit++;
+							hits300++;
 						}
 					} else {
 						lastHit = "200";
 						health += health200;
 						totalAcc += acc200;
 						notesHit++;
+						hits200++;
 					}
 				} else {
 					lastHit = "100";
 					health += health100;
 					totalAcc += acc100;
 					notesHit++;
+					hits100++;
 				}
 			} else {
 				lastHit = "50";
 				health += health50;
 				totalAcc += acc50;
 				notesHit++;
+				hits50++;
 			}
 			combo++;
 			hitTimings.push(loadedMap.notes[noteTest].s-audio.currentTime*1000);
@@ -421,6 +454,7 @@ window.onkeyup = e => {
 			health += healthMiss;
 			totalAcc += accMiss;
 			notesHit++;
+			hitsMiss++;
 			combo = 0;
 			if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 		}
@@ -435,6 +469,7 @@ window.onkeyup = e => {
 		health += healthMiss;
 		totalAcc += accMiss;
 		notesHit++;
+		hitsMiss++;
 		health = Math.max(health, 0)
 		health = Math.min(health, 100)
 		lastHitT = audio.currentTime*1000;
