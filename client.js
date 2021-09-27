@@ -79,6 +79,7 @@ function loadMap(map) {
 	setTimeout(() => {window.audio.play()}, 500);
 	renderScreen();
 	maxCombo = 0;
+	startT = loadedMap.notes[0].s || 0;
 }
 
 function makeImg(e) { var img = new Image(); img.src = e; return img; }
@@ -167,6 +168,7 @@ var hits200 = 0;
 var hits100 = 0;
 var hits50 = 0;
 var hitsMiss = 0;
+var startT = 0;
 
 function renderScreen() {
 	if (ingame) {
@@ -279,10 +281,19 @@ function renderScreen() {
 		requestAnimationFrame(renderScreen);
 		recF++;
 		if (new Date().getTime() % 2000 > 1000) {
-			if (recF > 1) console.log(recF)
+			if (recF > 1) console.log("fps", recF)
 			recF = 0;
 		}
 		if (audio.currentTime == audio.duration || !loadedMap.notes[0]) setTimeout(e => {resultsScreen = true; ingame = false}, 500);
+		ctx.globalAlpha = 0.75;
+		ctx.fillStyle = "white";
+		if (audio.currentTime*1000-startT < 0) {
+			ctx.fillStyle = "lime";
+			ctx.fillRect(0, 0, audio.currentTime*1000/startT*window.innerWidth, 10);
+		}
+		else if (loadedMap.notes[0]) ctx.fillRect(0, 0, (audio.currentTime*1000-startT)/(Math.max(loadedMap.notes[loadedMap.notes.length-1].s, loadedMap.notes[loadedMap.notes.length-1].e || 0) - startT) * window.innerWidth, 10)
+		else ctx.fillRect(0, 0, window.innerWidth, 10);
+		ctx.globalAlpha = 1;
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
@@ -334,7 +345,6 @@ window.onkeydown = e => {
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => e.l == i)[0]);
 		}
-		console.log(noteTest);
 		if (noteTest > -1 && Math.abs(loadedMap.notes[noteTest].s-audio.currentTime*1000) < missWindow*window.audio.playbackRate) {
 			if (Math.abs(loadedMap.notes[noteTest].s-audio.currentTime*1000) < window50*window.audio.playbackRate) {
 				if (Math.abs(loadedMap.notes[noteTest].s-audio.currentTime*1000) < window100*window.audio.playbackRate) {
@@ -463,7 +473,6 @@ window.onkeyup = e => {
 		lastHitT = audio.currentTime*1000;
 		window.loadedMap.notes = window.loadedMap.notes.slice(0, noteTest).concat(window.loadedMap.notes.slice(noteTest+1, window.loadedMap.notes.length));
 	} else if (noteTest > -1 && loadedMap.notes[noteTest].triggered) {
-		console.log(Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000));
 		lastHit = "miss";
 		if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 		health += healthMiss;
