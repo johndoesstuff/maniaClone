@@ -31,8 +31,8 @@ window.skins.plox = {
 			false: makeImg("k_left.png"),
 		},
 		{
-			true: makeImg("k_downleft.png"),
-			false: makeImg("kd_downleft.png"),
+			true: makeImg("kd_downleft.png"),
+			false: makeImg("k_downleft.png"),
 		},
 		{
 			true: makeImg("kd_down.png"),

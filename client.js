@@ -163,6 +163,7 @@ var resultsScreen = false;
 function renderScreen() {
 	if (ingame) {
 		document.body.style.overflow = "hidden";
+		document.getElementById("notCanvas").style.display = "none";
 		window.maniaWidth = skins[skin].widthMult*Math.sqrt(loadedMap.general.keys)/2*window.defaultManiaWidth;
 		var lnCanvases = Array(skins[skin].notes.length).fill(0).map(e => document.createElement("canvas"));
 		lnCanvases.forEach(e => e.width = (Math.ceil(maniaWidth/loadedMap.general.keys)));
@@ -272,6 +273,7 @@ function renderScreen() {
 			recF = 0;
 		}
 	} else if (resultsScreen) {
+		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
