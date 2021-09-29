@@ -3,9 +3,6 @@ var ctx = canvas.getContext("2d");
 
 renderScreen();
 
-variableSpeedMiss = 0.98;
-variableSpeedMax = 1.005;
-
 skin = (window.location.href.split("skin=")[1] || "").split("&")[0] || "quaver";
 
 window.keybinds = {
@@ -29,27 +26,6 @@ window.keybinds = {
 	18: "qawsedrfvnjukilo;p".split(""),
 };
 
-window.keycolors = {
-	1: [0],
-	2: [0,0],
-	3: [0,2,0],
-	4: [0,1,1,0],
-	5: [0,1,2,1,0],
-	6: [0,1,0,0,1,0],
-	7: [0,1,0,2,0,1,0],
-	8: [0,1,0,2,2,0,1,0],
-	9: [0,1,0,1,2,1,0,1,0],
-	10: [0,1,2,1,0,0,1,2,1,0],
-	11: [0,1,2,1,0,2,0,1,2,1,0],
-	12: [0,1,2,1,0,1,1,0,1,2,1,0],
-	13: [0,1,2,1,0,1,2,1,0,1,2,1,0],
-	14: [0,1,2,1,0,1,2,2,1,0,1,2,1,0],
-	15: [0,1,0,1,0,1,2,1,2,1,0,1,0,1,0],
-	16: [0,1,0,1,0,1,2,1,1,2,1,0,1,0,1,0],
-	17: [0,1,1,0,1,2,2,1,2,1,2,2,1,0,1,1,0],
-	18: [0,1,1,0,1,2,2,1,0,0,1,2,2,1,0,1,1,0],
-};
-
 window.rankAccs = [
 	[100, "rankX"],
 	[95, "rankS"],
@@ -58,10 +34,6 @@ window.rankAccs = [
 	[70, "rankC"],
 	[0, "rankD"],
 ];
-
-window.defaultManiaWidth = 380;
-window.bottomHeight = 100;
-window.noteWidth = 30;
 
 function loadMap(map) {
 	ingame = true;
@@ -97,42 +69,7 @@ function changeScrollSpeed(e) {
 	else window.location.href += "?speed=" + e;
 }
 
-/*window.images = {
-	out_r : makeImg("out_r.png"),
-	out_p : makeImg("out_p.png"),
-	in_r : makeImg("in_r.png"),
-	in_p : makeImg("in_p.png"),
-	mid_r : makeImg("mid_r.png"),
-	mid_p : makeImg("mid_p.png"),
-	hitMiss : makeImg("miss.png"),
-	hitMax : makeImg("max.png"),
-	hit50 : makeImg("50.png"),
-	hit100 : makeImg("100.png"),
-	hit200 : makeImg("200.png"),
-	hit300 : makeImg("300.png"),
-	skip : makeImg("skip.png"),
-	rankX : makeImg("rank_x.png"),
-	rankS : makeImg("rank_s.png"),
-	rankA : makeImg("rank_a.png"),
-	rankB : makeImg("rank_b.png"),
-	rankC : makeImg("rank_c.png"),
-	rankD : makeImg("rank_d.png"),
-	combo : [
-		makeImg("combo-0.png"),
-		makeImg("combo-1.png"),
-		makeImg("combo-2.png"),
-		makeImg("combo-3.png"),
-		makeImg("combo-4.png"),
-		makeImg("combo-5.png"),
-		makeImg("combo-6.png"),
-		makeImg("combo-7.png"),
-		makeImg("combo-8.png"),
-		makeImg("combo-9.png"),
-	],
-}*/
-
-window.recF = 0;
-
+var recF = 0;
 var window50 = 127;
 var window100 = 103;
 var window200 = 73;
@@ -170,6 +107,12 @@ var hits50 = 0;
 var hitsMiss = 0;
 var startT = 0;
 var globalVisualOffset = -0.6;
+var variableSpeedMiss = 0.98;
+var variableSpeedMax = 1.005;
+var defaultManiaWidth = 380;
+var bottomHeight = 100;
+var noteWidth = 30;
+var keysPressed = {};
 
 function renderScreen() {
 	if (ingame) {
@@ -339,8 +282,6 @@ function renderScreen() {
 		document.body.style.overflow = "default";
 	}
 }
-
-keysPressed = {};
 
 for (var i = 0; i < Object.keys(keybinds).length; i++) {
 	for (var j = 0; j < keybinds[Object.keys(keybinds)[i]].length; j++) {
