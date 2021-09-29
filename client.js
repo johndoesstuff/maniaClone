@@ -1,3 +1,5 @@
+//burnt orange is my favorite color :)
+
 var canvas = document.getElementById("c");
 var ctx = canvas.getContext("2d");
 
