@@ -464,46 +464,51 @@ window.onkeyup = e => {
 						hits200++;
 					}
 				} else {
-					lastHit = "100";
-					health += health100;
-					totalAcc += acc100;
+					lastHit = "200";
+					health += health200;
+					totalAcc += acc200;
 					notesHit++;
-					hits100++;
+					hits200++;
 				}
 			} else {
-				lastHit = "50";
-				health += health50;
-				totalAcc += acc50;
+				lastHit = "200";
+				health += health200;
+				totalAcc += acc200;
 				notesHit++;
-				hits50++;
+				hits200++;
 			}
 			combo++;
 			hitTimings.unshift(loadedMap.notes[noteTest].e-audio.currentTime*1000);
 			if (hitTimings.length >= 50) hitTimings.pop();
 		} else {
-			lastHit = "miss";
-			health += healthMiss;
-			totalAcc += accMiss;
+			lastHit = "200";
+			health += health200;
+			totalAcc += acc200;
 			notesHit++;
-			hitsMiss++;
-			combo = 0;
-			if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
+			hits200++;
 		}
 		health = Math.max(health, 0)
 		health = Math.min(health, 100)
 		lastHitT = audio.currentTime*1000;
 		window.loadedMap.notes = window.loadedMap.notes.slice(0, noteTest).concat(window.loadedMap.notes.slice(noteTest+1, window.loadedMap.notes.length));
 	} else if (noteTest > -1 && loadedMap.notes[noteTest].triggered) {
-		lastHit = "miss";
-		if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
-		health += healthMiss;
-		totalAcc += accMiss;
+		if (loadedMap.notes[noteTest].e-audio.currentTime*1000 > 0) {
+			lastHit = "miss";
+			if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
+			health += healthMiss;
+			totalAcc += accMiss;
+			hitsMiss++;
+			combo = 0;
+		} else {
+			lastHit = "200";
+			health += health200;
+			totalAcc += acc200;
+			hits200++;
+		}
 		notesHit++;
-		hitsMiss++;
 		health = Math.max(health, 0)
 		health = Math.min(health, 100)
 		lastHitT = audio.currentTime*1000;
-		combo = 0;
 		window.loadedMap.notes = window.loadedMap.notes.slice(0, noteTest).concat(window.loadedMap.notes.slice(noteTest+1, window.loadedMap.notes.length));
 	}
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
