@@ -380,12 +380,12 @@ window.onkeyup = e => {
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 		if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => e.l == i)[0]);
 	}
-	if (noteTest > -1 && loadedMap.notes[noteTest].triggered && Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < missWindow) {
-		if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window50) {
-			if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window100) {
-				if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window200) {
-					if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window300) {
-						if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < windowMax) {
+	if (noteTest > -1 && loadedMap.notes[noteTest].triggered && Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < missWindow*window.audio.playbackRate) {
+		if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window50*window.audio.playbackRate) {
+			if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window100*window.audio.playbackRate) {
+				if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window200*window.audio.playbackRate) {
+					if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window300*window.audio.playbackRate) {
+						if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < windowMax*window.audio.playbackRate) {
 							lastHit = "Max";
 							health += healthMax;
 							totalAcc += accMax;
