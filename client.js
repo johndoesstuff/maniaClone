@@ -478,7 +478,7 @@ window.onkeyup = e => {
 				hits200++;
 			}
 			combo++;
-			hitTimings.unshift(loadedMap.notes[noteTest].e-audio.currentTime*1000);
+			hitTimings.unshift(loadedMap.notes[noteTest].s-audio.currentTime*1000);
 			if (hitTimings.length >= 50) hitTimings.pop();
 		} else {
 			lastHit = "200";
