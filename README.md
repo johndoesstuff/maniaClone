@@ -22,3 +22,5 @@ takes in .osz files
 * changeable keybinds
 
 * restart without reloading
+
+* fix skipping
