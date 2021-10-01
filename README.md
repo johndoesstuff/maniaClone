@@ -13,8 +13,6 @@ takes in .osz files
 
 * beatmap selection ui
 
-* different od / od mods
-
 * kps counter?
 
 * changeable keybinds
