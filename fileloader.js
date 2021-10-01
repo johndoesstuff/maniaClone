@@ -29,7 +29,7 @@ document.getElementById("map").onchange = async function() {
 				maps.push(convert(text[i]));
 				var a = document.createElement("div");
 				var nps = Math.round(maps[maps.length-1].notes.length/(maps[maps.length-1].notes[maps[maps.length-1].notes.length-1].s-maps[maps.length-1].notes[0].s)*100000)/100
-				a.innerText = maps[maps.length-1].general.keys + "k " + nps + "kps " + Math.round(maps[maps.length-1].notes.filter(e => e.e).length/maps[maps.length-1].notes.length*10000)/100 + "%ln : " + maps[maps.length-1].general.diff;
+				a.innerText = maps[maps.length-1].general.keys + "k " + nps + "kps OD: " + maps[maps.length-1].general.od + ", " + Math.round(maps[maps.length-1].notes.filter(e => e.e).length/maps[maps.length-1].notes.length*10000)/100 + "%ln : " + maps[maps.length-1].general.diff;
 				a.id = maps.length-1;
 				console.log(a);
 				a.onclick = (e) => {

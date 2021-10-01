@@ -27,6 +27,7 @@ function convert(e) {
 	mapF.general.keys = map.difficulty.CircleSize;
 	mapF.general.artist = map.metadata.Artist;
 	mapF.general.diff = map.metadata.Version;
+	mapF.general.od = map.difficulty.OverallDifficulty;
 	mapF.general.audio = map.general.AudioFilename;
 	mapF.general.preview = map.general.PreviewTime;
 	return mapF;

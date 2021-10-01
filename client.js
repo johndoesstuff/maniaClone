@@ -48,6 +48,8 @@ function loadMap(map) {
 		var rnd = Array(Number(loadedMap.general.keys)).fill(0).map((e,i)=>i).sort(e=>Math.random()-0.5);
 		loadedMap.notes.forEach(e=>{e.l = rnd[e.l-Number(loadedMap.general.keys)]});
 	}
+	od = window.loadedMap.general.od;
+	updateWindows();
 	window.audio.playbackRate = Number(document.getElementById("speed").value)
 	window.audio.volume = 0.1;
 	setTimeout(() => {window.audio.play()}, 500);
@@ -74,6 +76,15 @@ function changeScrollSpeed(e) {
 	if (window.location.href.split("speed=")[1]) window.location.href = window.location.href.split("speed=" + scrollSpeed)[0] + "speed=" + e + window.location.href.split("speed=" + scrollSpeed)[1];
 	else if (window.location.href.split("?")[1]) window.location.href += "&speed=" + e;
 	else window.location.href += "?speed=" + e;
+}
+
+function updateWindows() {
+	missWindow = 188 - 3*od;
+	window50 = 151 - 3*od;
+	window100 = 127 - 3*od;
+	window200 = 97 - 3*od;
+	window300 = 64 - 3*od;
+	windowMax = 40 - 3*od;
 }
 
 var recF = 0;
