@@ -7,8 +7,6 @@ takes in .osz files
 
 ## todo
 
-* cap ln bodies at keys
-
 * calculate star rating
 
 * make beatmaps automatically loadable
