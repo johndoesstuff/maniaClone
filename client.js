@@ -51,9 +51,14 @@ function loadMap(map) {
 	window.audio.playbackRate = Number(document.getElementById("speed").value)
 	window.audio.volume = 0.1;
 	setTimeout(() => {window.audio.play()}, 500);
-	renderScreen();
 	maxCombo = 0;
 	startT = loadedMap.notes[0].s || 0;
+	var lnCanvases = Array(skins[skin].notes.length).fill(0).map(e => document.createElement("canvas"));
+	lnCanvases.forEach(e => e.width = (Math.ceil(maniaWidth/loadedMap.general.keys)));
+	lnCanvases.forEach((e, i) => e.height = Math.floor(e.width*skins[skin].notes[i].mid.height/skins[skin].notes[i].mid.width));
+	lnCanvases.forEach((e, i) => e.getContext("2d").drawImage(skins[skin].notes[i].mid, 0, 0, e.width, e.height));
+	window.lnPatterns = Array(lnCanvases.length).fill(0).map((e, i) => ctx.createPattern(lnCanvases[i], "repeat-y"));
+	renderScreen();
 }
 
 function makeImg(e) { var img = new Image(); img.src = e; return img; }
@@ -122,10 +127,6 @@ function renderScreen() {
 		document.body.style.overflow = "hidden";
 		document.getElementById("notCanvas").style.display = "none";
 		window.maniaWidth = skins[skin].widthMult*Math.sqrt(loadedMap.general.keys)/2*window.defaultManiaWidth;
-		var lnCanvases = Array(skins[skin].notes.length).fill(0).map(e => document.createElement("canvas"));
-		lnCanvases.forEach(e => e.width = (Math.ceil(maniaWidth/loadedMap.general.keys)));
-		lnCanvases.forEach((e, i) => e.height = Math.floor(e.width*skins[skin].notes[i].mid.height/skins[skin].notes[i].mid.width));
-		lnCanvases.forEach((e, i) => e.getContext("2d").drawImage(skins[skin].notes[i].mid, 0, 0, e.width, e.height));
 		window.scrollSpeed = Number((window.location.href.split("speed=")[1] || "").split("&")[0]) || 32;
 		window.scrollSpeed /= window.audio.playbackRate;
 		healthAnim = 0.9*healthAnim + 0.1*health;
@@ -136,12 +137,11 @@ function renderScreen() {
 		ctx.fillStyle = skins[skin].bgColor;
 		ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
-			//ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
 			ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 		}
 		for (var i = 0; i < Math.min(window.loadedMap.notes.length, 100); i++) {
 			var note = window.loadedMap.notes[i];
-			ctx.fillStyle = ctx.createPattern(lnCanvases[skins[skin].keycolors[loadedMap.general.keys][note.l]], "repeat-y");
+			ctx.fillStyle = lnPatterns[skins[skin].keycolors[loadedMap.general.keys][note.l]];
 			ctx.save();
 			ctx.translate(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-audio.currentTime*1000)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)));
 			if (note.e) {
@@ -167,7 +167,6 @@ function renderScreen() {
 		}
 		if (skins[skin].keyFront) {
 			for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
-				//ctx.drawImage([images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_r"], images[(["out", "in", "mid"])[keycolors[loadedMap.general.keys][i]] + "_p"]][keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, images.out_r.height * (maniaWidth/loadedMap.general.keys/images.out_r.width))
 				ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 			}
 		}
@@ -190,7 +189,6 @@ function renderScreen() {
 			if (lastHit == "200") ctx.drawImage(skins[skin].hit200, window.innerWidth/2 - skins[skin].hit200.width/2, window.innerHeight/3 - skins[skin].hit200.height/2 + 5*(s-4))
 			if (lastHit == "100") ctx.drawImage(skins[skin].hit100, window.innerWidth/2 - skins[skin].hit100.width/2, window.innerHeight/3 - skins[skin].hit100.height/2 + 5*(s-4))
 			if (lastHit == "50") ctx.drawImage(skins[skin].hit50, window.innerWidth/2 - skins[skin].hit50.width/2, window.innerHeight/3 - skins[skin].hit50.height/2 + 5*(s-4))
-			//ctx.fillText(lastHit, window.innerWidth/2, window.innerHeight/2)
 			ctx.fillStyle = "white";
 			ctx.textAlign = "center";
 			var combostr = String(combo);
@@ -217,7 +215,6 @@ function renderScreen() {
 				ctx.fillRect(((hitTimings[i]/window50+1)/2)*(window.innerWidth/10)-window.innerWidth/800+window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/32, window.innerWidth/400, window.innerHeight/16);
 			}
 			ctx.globalAlpha = 1;
-			//ctx.fillText(combo, window.innerWidth/2, window.innerHeight/2)
 		} else {
 			ctx.font = "4vw Arial"
 		}
@@ -306,9 +303,6 @@ window.onkeydown = e => {
 		else audio.pause()
 	}
 	if (keybinds[loadedMap.general.keys].includes(e.key.toLowerCase()) && keysPressed[e.key.toLowerCase()] == 0) {
-		//a= new Audio("hit.wav");
-		//a.volume = 0.2;
-		//a.play();
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => e.l == i)[0]);
 		}
