@@ -77,11 +77,13 @@ function changeScrollSpeed(e) {
 }
 
 var recF = 0;
-var window50 = 127;
-var window100 = 103;
-var window200 = 73;
-var window300 = 40.33;
-var windowMax = 16.33
+var od = 8;
+var missWindow = 188 - 3*od;
+var window50 = 151 - 3*od;
+var window100 = 127 - 3*od;
+var window200 = 97 - 3*od;
+var window300 = 64 - 3*od;
+var windowMax = 40 - 3*od;
 var healthMax = 1;
 var health300 = 0.7;
 var health200 = 0.1;
@@ -96,7 +98,6 @@ var acc200 = 2/3;
 var acc100 = 1/3;
 var acc50 = 1/6;
 var accMiss = 0;
-var missWindow = 164;
 var lastHit = "";
 var lastHitT = 0;
 var health = 100;
