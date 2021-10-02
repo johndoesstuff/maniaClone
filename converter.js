@@ -22,7 +22,6 @@ function convert(e) {
 		});
 	});
 	if (map.general.Mode != "3") return "bruh";
-	//if (map.difficulty.CircleSize != "4") return "4k only";
 	mapF.general.title = map.metadata.Title;
 	mapF.general.keys = map.difficulty.CircleSize;
 	mapF.general.artist = map.metadata.Artist;
