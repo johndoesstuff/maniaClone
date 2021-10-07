@@ -157,8 +157,6 @@ function renderScreen() {
 			ctx.save();
 			ctx.translate(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-audio.currentTime*1000)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)));
 			if (note.e) {
-				//if (note.triggered) ctx.fillRect(0, 0, maniaWidth/loadedMap.general.keys, (scrollSpeed/20)*(note.e-audio.currentTime*1000)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2 - ((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)));
-				//else ctx.fillRect(0, 0, maniaWidth/loadedMap.general.keys, (scrollSpeed/20)*(note.e-note.s)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2);
 				ctx.fillRect(0, 0, maniaWidth/loadedMap.general.keys, note.triggered ? ((scrollSpeed/20)*(note.e-audio.currentTime*1000)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2 - ((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset))) : ((scrollSpeed/20)*(note.e-note.s)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2));
 			}
 			ctx.restore();
@@ -273,6 +271,12 @@ function renderScreen() {
 		else if (loadedMap.notes[0]) ctx.fillRect(0, 0, (audio.currentTime*1000-startT)/(Math.max(loadedMap.notes[loadedMap.notes.length-1].s, loadedMap.notes[loadedMap.notes.length-1].e || 0) - startT) * window.innerWidth, 10)
 		else ctx.fillRect(0, 0, window.innerWidth, 10);
 		ctx.globalAlpha = 1;
+		ctx.fillStyle = "green";
+		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/8), 0, window.innerWidth * 1/8, window.innerHeight * 1/8);
+		ctx.textAlign = "center";
+		ctx.fillStyle = "white";
+		var nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+1e4).length/10*100)/100;
+		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/8);
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";

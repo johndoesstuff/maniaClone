@@ -13,7 +13,7 @@ takes in .osz files
 
 * beatmap selection ui
 
-* kps counter?
+* kps counter
 
 * changeable keybinds
 
