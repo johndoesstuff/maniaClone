@@ -29,7 +29,19 @@ document.getElementById("map").onchange = async function() {
 				maps.push(convert(text[i]));
 				var a = document.createElement("div");
 				var nps = Math.round(maps[maps.length-1].notes.length/(maps[maps.length-1].notes[maps[maps.length-1].notes.length-1].s-maps[maps.length-1].notes[0].s)*100000)/100
-				a.innerText = maps[maps.length-1].general.keys + "k " + nps + "kps OD: " + maps[maps.length-1].general.od + ", " + Math.round(maps[maps.length-1].notes.filter(e => e.e).length/maps[maps.length-1].notes.length*10000)/100 + "%ln : " + maps[maps.length-1].general.diff;
+				var deltaT = 10000;
+				var npsDist = Array(maps[maps.length-1].notes.length).fill(0).map((e, i) => maps[maps.length-1].notes.filter(n => n.s > maps[maps.length-1].notes[i].s && n.s < maps[maps.length-1].notes[i].s + deltaT).length/(deltaT/1000));
+				npsDist = npsDist.sort((a, b) => b - a);
+				var sampleNps = npsDist.slice(0, Math.floor(npsDist[0])).reduce((a, b) => a+b)/Math.floor(npsDist[0]);
+				var k = maps[maps.length-1].general.keys;
+				var sampleNps = Math.round(sampleNps*100)/100;
+				var od = maps[maps.length-1].general.od;
+				var ln = Math.round(maps[maps.length-1].notes.filter(e => e.e).length/maps[maps.length-1].notes.length*10000)/100;
+				var diff = maps[maps.length-1].general.diff;
+				//a.innerText = k + "k " + nps + "kps " + sampleNps + "Skps OD: " + od + ", " + ln + "%ln : " + diff;
+				var starScale = 0.15;
+				var star = Math.round(starScale*100*((sampleNps + nps) + ln/100*(sampleNps + nps) + od/100*(sampleNps + nps)))/100;
+				a.innerText = k + "K " + diff + " | " + star + "*\nNPS: " + sampleNps + "~" + nps + " OD: " + od + " LN: " + ln + "%";
 				a.id = maps.length-1;
 				console.log(a);
 				a.onclick = (e) => {
