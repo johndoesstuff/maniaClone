@@ -132,6 +132,13 @@ var defaultManiaWidth = 380;
 var bottomHeight = 100;
 var noteWidth = 30;
 var keysPressed = {};
+var npsColors = [
+	[5, "#77f283"],
+	[10, "#9cdb5c"],
+	[15, "#dbce5c"],
+	[20, "#db8942"],
+	[Infinity, "#db5442"],
+];
 
 function renderScreen() {
 	if (ingame) {
@@ -160,7 +167,7 @@ function renderScreen() {
 				ctx.fillRect(0, 0, maniaWidth/loadedMap.general.keys, note.triggered ? ((scrollSpeed/20)*(note.e-audio.currentTime*1000)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2 - ((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset))) : ((scrollSpeed/20)*(note.e-note.s)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2));
 			}
 			ctx.restore();
-			if (!note.triggered) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-audio.currentTime*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
+			if (!note.triggered || note.s > audio.currentTime*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-audio.currentTime*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
 			ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-audio.currentTime*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)
 			if (note.s-audio.currentTime*1000 < -window50 && !note.triggered) {
 				window.loadedMap.notes = window.loadedMap.notes.slice(0, i).concat(window.loadedMap.notes.slice(i+1, window.loadedMap.notes.length))
@@ -271,12 +278,15 @@ function renderScreen() {
 		else if (loadedMap.notes[0]) ctx.fillRect(0, 0, (audio.currentTime*1000-startT)/(Math.max(loadedMap.notes[loadedMap.notes.length-1].s, loadedMap.notes[loadedMap.notes.length-1].e || 0) - startT) * window.innerWidth, 10)
 		else ctx.fillRect(0, 0, window.innerWidth, 10);
 		ctx.globalAlpha = 1;
-		ctx.fillStyle = "green";
+		var nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+1e4).length/10*100)/100;
+		ctx.fillStyle = "#5c5c5c";
+		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/7.8), 0, window.innerWidth * 1/7.8, window.innerHeight * 1/7.8);
+		ctx.fillStyle = "#212121";
 		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/8), 0, window.innerWidth * 1/8, window.innerHeight * 1/8);
 		ctx.textAlign = "center";
-		ctx.fillStyle = "white";
-		var nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+1e4).length/10*100)/100;
-		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/8);
+		ctx.fillStyle = npsColors.filter(e => e[0] > nps)[0][1];
+		ctx.font = "5vw Arial";
+		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/10);
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
