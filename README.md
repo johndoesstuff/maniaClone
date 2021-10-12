@@ -11,8 +11,6 @@ takes in .osz files
 
 * beatmap selection ui
 
-* kps counter
-
 * changeable keybinds
 
 * restart without reloading
