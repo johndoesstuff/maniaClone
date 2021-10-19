@@ -42,7 +42,7 @@ document.getElementById("map").onchange = async function() {
 				//a.innerText = k + "k " + nps + "kps " + sampleNps + "Skps OD: " + od + ", " + ln + "%ln : " + diff;
 				var starScale = 0.15;
 				var star = Math.round(starScale*100*((sampleNps + nps) + ln/100*(sampleNps + nps) + od/100*(sampleNps + nps)))/100;
-				a.innerText = k + "K " + diff + " | " + star + "*\nNPS: " + sampleNps + "~" + nps + " OD: " + od + " LN: " + ln + "%";
+				a.innerText = k + "K " + diff + " | " + star + "*\nNPS: " + sampleNps + "~" + nps + " OD: " + od + " LN: " + ln + "%\n\n";
 				a.id = maps.length-1;
 				console.log(a);
 				a.onclick = (e) => {
