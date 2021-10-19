@@ -46,6 +46,11 @@ document.getElementById("map").onchange = async function() {
 				a.id = maps.length-1;
 				a.starValue = star;
 				a.key = k;
+				a.diff = diff;
+				a.sampleNps = sampleNps;
+				a.nps = nps;
+				a.od = od;
+				a.ln = ln;
 				console.log(a);
 				a.onclick = (e) => {
 					loadMap(maps[e.srcElement.id], mapAudio);
