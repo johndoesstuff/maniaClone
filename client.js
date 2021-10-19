@@ -262,6 +262,15 @@ function renderScreen() {
 			ctx.fillRect(window.innerWidth/10-window.innerWidth/50, ((hitTimings[i]/window50+1)/2)*window.innerHeight, window.innerWidth/25, 3);
 		}
 		ctx.globalAlpha = 1;
+		var nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+(audio.playbackRate*1e4)).length/10*100)/100;
+		ctx.fillStyle = "#5c5c5c";
+		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/7.8), 0, window.innerWidth * 1/7.8, window.innerHeight * 1/7.8);
+		ctx.fillStyle = "#212121";
+		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/8), 0, window.innerWidth * 1/8, window.innerHeight * 1/8);
+		ctx.textAlign = "center";
+		ctx.fillStyle = npsColors.filter(e => e[0] > nps)[0][1];
+		ctx.font = "5vw Arial";
+		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/10);
 		requestAnimationFrame(renderScreen);
 		recF++;
 		if (new Date().getTime() % 2000 > 1000) {

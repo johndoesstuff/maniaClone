@@ -7,13 +7,9 @@ takes in .osz files
 
 ## todo
 
-* calculate star rating
-
 * make beatmaps automatically loadable
 
 * beatmap selection ui
-
-* kps counter
 
 * changeable keybinds
 
