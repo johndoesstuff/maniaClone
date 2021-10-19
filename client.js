@@ -139,6 +139,13 @@ var npsColors = [
 	[20, "#db8942"],
 	[Infinity, "#db5442"],
 ];
+var speedColors = [
+	[0.5, "#77f283"],
+	[0.75, "#9cdb5c"],
+	[1, "#dbce5c"],
+	[1.5, "#db8942"],
+	[Infinity, "#db5442"],
+];
 
 function renderScreen() {
 	if (ingame) {
@@ -295,8 +302,9 @@ function renderScreen() {
 		ctx.textAlign = "center";
 		ctx.fillStyle = npsColors.filter(e => e[0] > nps)[0][1];
 		ctx.font = "2.5vw Arial";
-		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/18);
-		ctx.fillText(Math.round(100*audio.playbackRate)/100, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/9 );
+		ctx.fillText(nps + "nps", window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/18);
+		ctx.fillStyle = speedColors.filter(e => e[0] > audio.playbackRate)[0][1];
+		ctx.fillText(Math.round(100*audio.playbackRate)/100 + "x", window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/9 );
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
