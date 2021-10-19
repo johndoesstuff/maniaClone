@@ -285,8 +285,9 @@ function renderScreen() {
 		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/8), 0, window.innerWidth * 1/8, window.innerHeight * 1/8);
 		ctx.textAlign = "center";
 		ctx.fillStyle = npsColors.filter(e => e[0] > nps)[0][1];
-		ctx.font = "5vw Arial";
-		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/10);
+		ctx.font = "3vw Arial";
+		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/14);
+		ctx.fillText(Math.round(100*audio.playbackRate)/100, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/7 );
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
