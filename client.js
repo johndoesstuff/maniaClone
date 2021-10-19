@@ -147,6 +147,7 @@ var speedColors = [
 	[Infinity, "#db5442"],
 ];
 
+speedAcc = e => (0.025*e+0.98);
 function renderScreen() {
 	if (ingame) {
 		if (combo > maxCombo) maxCombo = combo;
@@ -180,7 +181,7 @@ function renderScreen() {
 				window.loadedMap.notes = window.loadedMap.notes.slice(0, i).concat(window.loadedMap.notes.slice(i+1, window.loadedMap.notes.length))
 				i--;
 				lastHit = "miss";
-				if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
+				if (variableSpeed) audio.playbackRate *= speedAcc(accMiss);
 				health -= 8;
 				combo = 0;
 				totalAcc += accMiss;
@@ -360,6 +361,7 @@ window.onkeydown = e => {
 								lastHit = "Max";
 								health += healthMax;
 								totalAcc += accMax;
+								if (variableSpeed) audio.playbackRate *= speedAcc(accMax);
 								notesHit++;
 								hitsMax++;
 								if (variableSpeed) audio.playbackRate *= variableSpeedMax;
@@ -367,6 +369,7 @@ window.onkeydown = e => {
 								lastHit = "300";
 								health += health300;
 								totalAcc += acc300;
+								if (variableSpeed) audio.playbackRate *= speedAcc(acc300);
 								notesHit++;
 								hits300++;
 							}
@@ -374,6 +377,7 @@ window.onkeydown = e => {
 							lastHit = "200";
 							health += health200;
 							totalAcc += acc200;
+							if (variableSpeed) audio.playbackRate *= speedAcc(acc200);
 							notesHit++;
 							hits200++;
 						}
@@ -381,6 +385,7 @@ window.onkeydown = e => {
 						lastHit = "100";
 						health += health100;
 						totalAcc += acc100;
+						if (variableSpeed) audio.playbackRate *= speedAcc(acc100);
 						notesHit++;
 						hits100++;
 					}
@@ -388,6 +393,7 @@ window.onkeydown = e => {
 					lastHit = "50";
 					health += health50;
 					totalAcc += acc50;
+					if (variableSpeed) audio.playbackRate *= speedAcc(acc50);
 					notesHit++;
 					hits50++;
 				}
@@ -398,10 +404,10 @@ window.onkeydown = e => {
 				lastHit = "miss";
 				health += healthMiss;
 				totalAcc += accMiss;
+				if (variableSpeed) audio.playbackRate *= speedAcc(accMiss);
 				notesHit++;
 				hitsMiss++;
 				combo = 0;
-				if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 			}
 			health = Math.max(health, 0)
 			health = Math.min(health, 100)
@@ -433,11 +439,12 @@ window.onkeyup = e => {
 							totalAcc += accMax;
 							notesHit++;
 							hitsMax++;
-							if (variableSpeed) audio.playbackRate *= variableSpeedMax;
+							if (variableSpeed) audio.playbackRate *= speedAcc(accMax);
 						} else {
 							lastHit = "300";
 							health += health300;
 							totalAcc += acc300;
+							if (variableSpeed) audio.playbackRate *= speedAcc(acc300);
 							notesHit++;
 							hits300++;
 						}
@@ -445,6 +452,7 @@ window.onkeyup = e => {
 						lastHit = "200";
 						health += health200;
 						totalAcc += acc200;
+						if (variableSpeed) audio.playbackRate *= speedAcc(acc200);
 						notesHit++;
 						hits200++;
 					}
@@ -452,6 +460,7 @@ window.onkeyup = e => {
 					lastHit = "200";
 					health += health200;
 					totalAcc += acc200;
+					if (variableSpeed) audio.playbackRate *= speedAcc(acc200);
 					notesHit++;
 					hits200++;
 				}
@@ -459,6 +468,7 @@ window.onkeyup = e => {
 				lastHit = "200";
 				health += health200;
 				totalAcc += acc200;
+				if (variableSpeed) audio.playbackRate *= speedAcc(acc200);
 				notesHit++;
 				hits200++;
 			}
@@ -469,6 +479,7 @@ window.onkeyup = e => {
 			lastHit = "200";
 			health += health200;
 			totalAcc += acc200;
+			if (variableSpeed) audio.playbackRate *= speedAcc(acc200);
 			notesHit++;
 			hits200++;
 		}
@@ -482,12 +493,14 @@ window.onkeyup = e => {
 			if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 			health += healthMiss;
 			totalAcc += accMiss;
+			if (variableSpeed) audio.playbackRate *= speedAcc(accMiss);
 			hitsMiss++;
 			combo = 0;
 		} else {
 			lastHit = "200";
 			health += health200;
 			totalAcc += acc200;
+			if (variableSpeed) audio.playbackRate *= speedAcc(acc200);
 			hits200++;
 		}
 		notesHit++;
