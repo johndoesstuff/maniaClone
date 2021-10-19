@@ -64,6 +64,7 @@ function loadMap(map) {
 }
 
 function makeImg(e) { var img = new Image(); img.src = e; return img; }
+speedAcc = e => (0.0125*e+0.99);
 
 function changeSkin(e) {
 	if (window.location.href.split("skin=")[1]) window.location.href = window.location.href.split("skin=" + skin)[0] + "skin=" + e + window.location.href.split("skin=" + skin)[1];
@@ -147,7 +148,6 @@ var speedColors = [
 	[Infinity, "#db5442"],
 ];
 
-speedAcc = e => (0.025*e+0.98);
 function renderScreen() {
 	if (ingame) {
 		if (combo > maxCombo) maxCombo = combo;

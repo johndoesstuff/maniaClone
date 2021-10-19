@@ -14,3 +14,5 @@ takes in .osz files
 * changeable keybinds
 
 * restart without reloading
+
+* forced keymodes
