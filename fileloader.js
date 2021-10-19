@@ -44,6 +44,7 @@ document.getElementById("map").onchange = async function() {
 				var star = Math.round(starScale*100*((sampleNps + nps) + ln/100*(sampleNps + nps) + od/100*(sampleNps + nps)))/100;
 				a.innerText = k + "K " + diff + " | " + star + "*\nNPS: " + sampleNps + "~" + nps + " OD: " + od + " LN: " + ln + "%\n\n";
 				a.id = maps.length-1;
+				a.starValue = star;
 				console.log(a);
 				a.onclick = (e) => {
 					loadMap(maps[e.srcElement.id], mapAudio);
@@ -51,6 +52,7 @@ document.getElementById("map").onchange = async function() {
 				document.getElementById("diffs").appendChild(a);
 			}
 		}
+		[...document.getElementById("diffs").children].sort((a, b) => a.starValue - b.starValue).forEach(e=>document.getElementById("diffs").appendChild(e));
 		for (var a = 0; a < maps.length; a++) {
 			mapAudio = maps[a].general.audio
 			for (var i = 0; i < entries.length; i++) {
