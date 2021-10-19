@@ -148,6 +148,10 @@ var speedColors = [
 	[Infinity, "#db5442"],
 ];
 
+document.getElementById("speed").onchange = function () {
+	[...document.getElementById("diffs").children].sort((a, b) => (a.starValue+(9999*Number(a.key))) - (b.starValue+(9999*Number(b.key)))).forEach(e=>document.getElementById("diffs").appendChild(e));
+}
+
 function renderScreen() {
 	if (ingame) {
 		if (combo > maxCombo) maxCombo = combo;
