@@ -14,6 +14,7 @@ zip.useWebWorkers = false;
 window.maps = [];
 document.getElementById("map").onchange = async function() {
 	window.maps = [];
+	while (document.getElementById("diffs").firstChild) document.getElementById("diffs").removeChild(document.getElementById("diffs").firstChild);
 	entries = await model.getEntries(document.getElementById("map").files[0],  "utf8" );
 	if (entries.length) {
 		console.log(entries[0].filename)
