@@ -45,6 +45,7 @@ function loadMap(map) {
 	variableSpeed = document.getElementById("variableSpeed").checked;
 	wobble = document.getElementById("wobble").checked;
 	hell = document.getElementById("hell").checked;
+	unreadable = document.getElementById("unreadable").checked;
 	if (document.getElementById("noln").checked) {
 		loadedMap.notes = loadedMap.notes.map(e => ({s: e.s, l: e.l}));
 	}
@@ -173,6 +174,10 @@ function renderScreen() {
 		if (hell) {
 			var ws = 0.5;
 			window.scrollSpeed = 4*(Math.sin(audio.currentTime/ws)+Math.sin(Math.PI*audio.currentTime/ws)+Math.sin(Math.sqrt(2)*audio.currentTime/ws))+30
+		}
+		if (unreadable) {
+			var ws = 0.25;
+			window.scrollSpeed = 3*(Math.sin(audio.currentTime/ws)+Math.sin(Math.PI*audio.currentTime/ws)+Math.sin(Math.sqrt(2)*audio.currentTime/ws))+20
 		}
 		window.scrollSpeed /= window.audio.playbackRate;
 		healthAnim = 0.9*healthAnim + 0.1*health;
