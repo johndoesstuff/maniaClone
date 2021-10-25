@@ -7,8 +7,6 @@ renderScreen();
 
 skin = (window.location.href.split("skin=")[1] || "").split("&")[0] || "quaver";
 
-window.onerror = (e) => {alert(e.message)}
-
 window.keybinds = {
 	1: " ".split(""),
 	2: "dj".split(""),
@@ -344,7 +342,6 @@ for (var i = 0; i < Object.keys(keybinds).length; i++) {
 }
 
 window.onkeydown = e => {
-	alert("e")
 	if (e.key == "Enter") {
 		if (audio.currentTime*1000+audio.playbackRate*500 < loadedMap.notes[0].s) audio.currentTime = loadedMap.notes[0].s/1000-0.5*audio.playbackRate;
 	}
