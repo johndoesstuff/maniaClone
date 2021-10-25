@@ -44,6 +44,7 @@ function loadMap(map) {
 	window.maniaWidth = skins[skin].widthMult*Math.sqrt(map.general.keys)/2*window.defaultManiaWidth;
 	variableSpeed = document.getElementById("variableSpeed").checked;
 	wobble = document.getElementById("wobble").checked;
+	hell = document.getElementById("hell").checked;
 	if (document.getElementById("random").checked) {
 		loadedMap.notes.forEach(e=>{e.l+=Number(loadedMap.general.keys)});
 		var rnd = Array(Number(loadedMap.general.keys)).fill(0).map((e,i)=>i).sort(e=>Math.random()-0.5);
@@ -135,6 +136,7 @@ var bottomHeight = 100;
 var noteWidth = 30;
 var keysPressed = {};
 var wobble = false;
+var hell = false;
 var npsColors = [
 	[5, "#77f283"],
 	[10, "#9cdb5c"],
@@ -164,6 +166,10 @@ function renderScreen() {
 		if (wobble) {
 			var ws = 1;
 			window.scrollSpeed = 2*(Math.sin(audio.currentTime/ws)+Math.sin(Math.PI*audio.currentTime/ws)+Math.sin(Math.sqrt(2)*audio.currentTime/ws))+30
+		}
+		if (hell) {
+			var ws = 0.5;
+			window.scrollSpeed = 4*(Math.sin(audio.currentTime/ws)+Math.sin(Math.PI*audio.currentTime/ws)+Math.sin(Math.sqrt(2)*audio.currentTime/ws))+30
 		}
 		window.scrollSpeed /= window.audio.playbackRate;
 		healthAnim = 0.9*healthAnim + 0.1*health;
