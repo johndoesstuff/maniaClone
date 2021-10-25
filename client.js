@@ -45,6 +45,9 @@ function loadMap(map) {
 	variableSpeed = document.getElementById("variableSpeed").checked;
 	wobble = document.getElementById("wobble").checked;
 	hell = document.getElementById("hell").checked;
+	if (document.getElementById("noln").checked) {
+		loadedMap.notes = loadedMap.notes.map(e => ({s: e.s, l: e.l}));
+	}
 	if (document.getElementById("random").checked) {
 		loadedMap.notes.forEach(e=>{e.l+=Number(loadedMap.general.keys)});
 		var rnd = Array(Number(loadedMap.general.keys)).fill(0).map((e,i)=>i).sort(e=>Math.random()-0.5);
