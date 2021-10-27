@@ -28,6 +28,119 @@ window.keybinds = {
 	18: "qawsedrfvnjukilo;p".split(""),
 };
 
+window.genSongs = [
+	{
+		title: "Beethoven Virus",
+		file: "genSongs/175.mp3",
+		bpm: 175,
+	},
+	{
+		title: "Dopamine",
+		file: "genSongs/175-2.mp3",
+		bpm: 175,
+	},
+	{
+		title: "Run",
+		file: "genSongs/150.33.mp3",
+		bpm: 150.33,
+	},
+	{
+		title: "Nailgun",
+		file: "genSongs/128.mp3",
+		bpm: 128,
+	},
+	{
+		title: "Highscore",
+		file: "genSongs/124.3.mp3",
+		bpm: 124.3,
+	},
+];
+
+window.generateMap = (song, pattern, keys) => {
+	song = window.genSongs[song];
+	var patternName = [
+		"Alternation",
+		"Jump",
+		"Hand",
+		"Quad/Hand",
+		"Stream",
+		"Jump Stream",
+		"Hand Stream",
+		"Trill",
+		"Jump Trill",
+		"Jump Chain",
+		"Hand Chain",
+		"Quad Chain",
+		"Jump Grace",
+		"Hand Grace",
+		"Quad Grace",
+		"Jack",
+		"Mini Jack",
+		"Jump Jack",
+		"Hand Jack",
+		"Running Men",
+		"Roll",
+		"Triplet",
+	][pattern]
+	var map = {
+		general: {
+			title: patternName + " Practice",
+			keys: keys,
+			artist: "Generated",
+			diff: pattern,
+			od: 8,
+			audio: song.file,
+		}
+	};
+	map.notes = [];
+	map.audio = new Audio(song.file);
+	for (var i = 0; i < 999; i++) {
+		var beatLen = 60000/song.bpm;
+		var t = i*beatLen;
+		switch (pattern) {
+			case 0: //alternation
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+1*beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+2*beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+3*beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				break;
+			case 1: //jump
+				map.notes.push({s: t, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				map.notes.push({s: t+beatLen/2, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				break;
+			case 2: //hand
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				break;
+			case 2: //quad hand
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				break;
+		}
+	}
+	return map;
+}
+
 window.rankAccs = [
 	[100, "rankX"],
 	[95, "rankS"],
