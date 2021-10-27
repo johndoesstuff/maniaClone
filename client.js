@@ -97,7 +97,6 @@ window.generateMap = (song, pattern, keys, bpm) => {
 	if (bpm) {
 		map.audio.playbackRate = bpm / song.bpm; 
 	}
-	alert(map.audio.playbackRate);
 	bpm = song.bpm || bpm;
 	for (var i = 0; i < 999; i++) {
 		var beatLen = 60000/bpm;
