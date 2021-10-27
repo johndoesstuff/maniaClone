@@ -154,7 +154,7 @@
 		<option value="4">Highscore</option>
 	</select>
 	<input id="patternBpm" type="text" placeholder="BPM (Default)"></input>
-	<button onclick="loadMap(generateMap(Number(document.getElementById('patternSong').value), Number(document.getElementById('patternType').value), 4))">Start</button><br><br>
+	<button onclick="loadMap(generateMap(Number(document.getElementById('patternSong').value), Number(document.getElementById('patternType').value), 4, Number(document.getElementById('patternBpm').value) || undefined), true)">Start</button><br><br>
 	<script src="client.js"></script>
 	<script src="converter.js"></script>
 	<script src="zip.min.js"></script>

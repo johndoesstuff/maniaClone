@@ -56,7 +56,7 @@ window.genSongs = [
 	},
 ];
 
-window.generateMap = (song, pattern, keys) => {
+window.generateMap = (song, pattern, keys, bpm) => {
 	song = window.genSongs[song];
 	var patternName = [
 		"Alternation",
@@ -94,8 +94,13 @@ window.generateMap = (song, pattern, keys) => {
 	};
 	map.notes = [];
 	map.audio = new Audio(song.file);
+	if (bpm) {
+		map.audio.playbackRate = bpm / song.bpm; 
+	}
+	alert(map.audio.playbackRate);
+	bpm = song.bpm || bpm;
 	for (var i = 0; i < 999; i++) {
-		var beatLen = 60000/song.bpm;
+		var beatLen = 60000/bpm;
 		var t = i*beatLen;
 		switch (pattern) {
 			case 0: //alternation
@@ -256,7 +261,7 @@ window.rankAccs = [
 	[0, "rankD"],
 ];
 
-function loadMap(map) {
+function loadMap(map, overrideSpeed) {
 	ingame = true;
 	window.loadedMap = map;
 	window.audio = map.audio;
@@ -275,7 +280,7 @@ function loadMap(map) {
 	}
 	od = window.loadedMap.general.od;
 	updateWindows();
-	window.audio.playbackRate = Number(document.getElementById("speed").value)
+	if (!overrideSpeed) window.audio.playbackRate = Number(document.getElementById("speed").value)
 	window.audio.volume = 0.1;
 	setTimeout(() => {window.audio.play()}, 500);
 	maxCombo = 0;
