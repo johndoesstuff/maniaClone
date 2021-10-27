@@ -204,7 +204,7 @@ window.generateMap = (song, pattern, keys) => {
 				map.notes.push({s: 2*t+3*beatLen/2, l: n3});
 				map.notes.push({s: 2*t+3*beatLen/2, l: n4});
 				break;
-			case 9: //jumpstream
+			case 9: //jump chain
 				map.notes.push({s: t, l: ~~(Math.random()*keys)});
 				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
 				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
@@ -215,6 +215,32 @@ window.generateMap = (song, pattern, keys) => {
 				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
 				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
 				map.notes.push({s: t+3*beatLen/4, l: p});
+				break;
+			case 10: //hand chain
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				map.notes.push({s: t+beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[~~(Math.random()*(keys-1))]});
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				map.notes.push({s: t+3*beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[~~(Math.random()*(keys-1))]});
+				break;
+			case 11: //quad chain
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t, l: 0});
+				map.notes.push({s: t, l: 1});
+				map.notes.push({s: t, l: 2});
+				map.notes.push({s: t, l: 3});
+				map.notes.push({s: t+beatLen/4, l: r});
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t+beatLen/2, l: 0});
+				map.notes.push({s: t+beatLen/2, l: 1});
+				map.notes.push({s: t+beatLen/2, l: 2});
+				map.notes.push({s: t+beatLen/2, l: 3});
+				map.notes.push({s: t+3*beatLen/4, l: r});
 				break;
 		}
 	}
