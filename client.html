@@ -63,6 +63,15 @@
 		input[type="text"]:focus {
 			background: #282828;
 		}
+		select {
+			font-family: aller;
+			color: white;
+			background: #1f1f1f;
+			padding: 0.3vw;
+			border-radius: 0.5vw;
+			font-size: 1.5vw;
+			border: none;
+		}
 		*:focus {
 			outline: none;
 		}
@@ -110,11 +119,45 @@
 	<button onclick="changeSkin('hueshift')">Hueshift</button>
 	<button onclick="changeSkin('fnf')">FnF</button><br><br>
 	<div class="label">Scroll Speed</div>
+	<input id="scrollspeed" value="32" type="text"></input>
+	<button onclick="changeScrollSpeed(document.getElementById('scrollspeed').value)">Update</button><br><br>
+	<div class="label">Generative</div>
+	<select id="patternType">
+		<option value="0">Alternation</option>
+		<option value="1">Jump</option>
+		<option value="2">Hand</option>
+		<option value="3">Quad/Hand</option>
+		<option value="4">Stream</option>
+		<option value="5">Jump Stream</option>
+		<option value="6">Hand Stream</option>
+		<option value="7">Trill</option>
+		<option value="8">Jump Trill</option>
+		<option value="9">Jump Chain</option>
+		<option value="10">Hand Chain</option>
+		<option value="11">Quad Chain</option>
+		<option value="12">Jump Grace</option>
+		<option value="13">Hand Grace</option>
+		<option value="14">Quad Grace</option>
+		<option value="15">Jack</option>
+		<option value="16">Mini Jack</option>
+		<option value="17">Jump Jack</option>
+		<option value="18">Hand Jack</option>
+		<option value="19">Running Men</option>
+		<option value="20">Roll</option>
+		<option value="21">Triplet</option>
+	</select>
+	<select id="patternSong">
+		<option value="0">Beethoven Virus</option>
+		<option value="1">Dopamine</option>
+		<option value="2">Run</option>
+		<option value="3">Nailgun</option>
+		<option value="4">Highscore</option>
+	</select>
+	<input id="patternBpm" type="text" placeholder="BPM (Default)"></input>
+	<button onclick="loadMap(generateMap(Number(document.getElementById('patternSong').value), Number(document.getElementById('patternType').value), 4))">Start</button><br><br>
 	<script src="client.js"></script>
 	<script src="converter.js"></script>
 	<script src="zip.min.js"></script>
 	<script src="fileloader.js"></script>
-	<input id="scrollspeed" value="32" type="text"></input>
-	<button onclick="changeScrollSpeed(document.getElementById('scrollspeed').value)">Update</button>
 	</div>
 </body>
