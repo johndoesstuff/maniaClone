@@ -246,6 +246,38 @@ window.generateMap = (song, pattern, keys, bpm) => {
 				map.notes.push({s: t+beatLen/2, l: 3});
 				map.notes.push({s: t+3*beatLen/4, l: r});
 				break;
+			case 12: //jump grace
+				map.notes.push({s: t, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				map.notes.push({s: t+beatLen/2, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+beatLen/2+beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				break;
+			case 13: //hand grace
+				o = Array(keys-1).fill(0).map((e,i) => i).sort(() => (Math.random() > .5) ? 1 : -1);
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t+o[0]*beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t+o[1]*beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t+o[2]*beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				o = Array(keys-1).fill(0).map((e,i) => i).sort(() => (Math.random() > .5) ? 1 : -1);
+				r = ~~(Math.random()*keys);
+				map.notes.push({s: t+beatLen/2+o[0]*beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: t+beatLen/2+o[1]*beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: t+beatLen/2+o[2]*beatLen/16, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				break;
+			case 14: //quad grace
+				o = Array(keys).fill(0).map((e,i) => i).sort(() => (Math.random() > .5) ? 1 : -1);
+				map.notes.push({s: t+o[0]*beatLen/16, l: 0});
+				map.notes.push({s: t+o[1]*beatLen/16, l: 1});
+				map.notes.push({s: t+o[2]*beatLen/16, l: 2});
+				map.notes.push({s: t+o[3]*beatLen/16, l: 3});
+				o = Array(keys).fill(0).map((e,i) => i).sort(() => (Math.random() > .5) ? 1 : -1);
+				map.notes.push({s: t+o[0]*beatLen/16+beatLen/2, l: 0});
+				map.notes.push({s: t+o[1]*beatLen/16+beatLen/2, l: 1});
+				map.notes.push({s: t+o[2]*beatLen/16+beatLen/2, l: 2});
+				map.notes.push({s: t+o[3]*beatLen/16+beatLen/2, l: 3});
+				break;
 		}
 	}
 	return map;
