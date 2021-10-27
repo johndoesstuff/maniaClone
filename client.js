@@ -126,15 +126,84 @@ window.generateMap = (song, pattern, keys) => {
 				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
 				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
 				break;
-			case 2: //quad hand
+			case 3: //quad hand
+				if (Math.random() < 0.5) {
+					r = ~~(Math.random()*keys);
+					map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+					map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+					map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				} else {
+					map.notes.push({s: t, l: 0});
+					map.notes.push({s: t, l: 1});
+					map.notes.push({s: t, l: 2});
+					map.notes.push({s: t, l: 3});
+				}
+				if (Math.random() < 0.5) {
+					r = ~~(Math.random()*keys);
+					map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+					map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+					map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				} else {
+					map.notes.push({s: t+beatLen/2, l: 0});
+					map.notes.push({s: t+beatLen/2, l: 1});
+					map.notes.push({s: t+beatLen/2, l: 2});
+					map.notes.push({s: t+beatLen/2, l: 3});
+				}
+				break;
+			case 4: //stream
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				map.notes.push({s: t+1*beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+2*beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				map.notes.push({s: t+3*beatLen/4, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				break;
+			case 5: //jumpstream
+				map.notes.push({s: 2*t, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: 2*t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: 2*t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: 2*t+2*beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: 2*t+3*beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				break;
+				break;
+			case 6: //handstream
 				r = ~~(Math.random()*keys);
-				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
-				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
-				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
-				r = ~~(Math.random()*keys);
-				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
-				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
-				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				map.notes.push({s: 2*t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
+				map.notes.push({s: 2*t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[1]});
+				map.notes.push({s: 2*t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[2]});
+				map.notes.push({s: 2*t+beatLen/2, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: 2*t+2*beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: 2*t+3*beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				break;
+			case 7: //trill
+				n1 = Array(keys).fill(0).map((e,i) => i).filter(e => e != ((map.notes[map.notes.length-1] || []).l || 0))[~~(Math.random()*(keys-1))];
+				n2 =  Array(keys).fill(0).map((e,i) => i).filter(e => e != n1)[~~(Math.random()*(keys-1))];
+				n3 =  Array(keys).fill(0).map((e,i) => i).filter(e => !([n1,n2]).includes(e))[~~(Math.random()*(keys-2))];
+				n4 =  Array(keys).fill(0).map((e,i) => i).filter(e => !([n1,n2,n3]).includes(e))[~~(Math.random()*(keys-3))];
+				map.notes.push({s: t, l: n1});
+				map.notes.push({s: t+beatLen/4, l: n2});
+				map.notes.push({s: t+2*beatLen/4, l: n1});
+				map.notes.push({s: t+3*beatLen/4, l: n2});
+				break;
+			case 8: //jump trill
+				n1 = Array(keys).fill(0).map((e,i) => i).filter(e => e != ((map.notes[map.notes.length-1] || []).l || 0))[~~(Math.random()*(keys-1))];
+				n2 =  Array(keys).fill(0).map((e,i) => i).filter(e => e != n1)[~~(Math.random()*(keys-1))];
+				n3 =  Array(keys).fill(0).map((e,i) => i).filter(e => !([n1,n2]).includes(e))[~~(Math.random()*(keys-2))];
+				n4 =  Array(keys).fill(0).map((e,i) => i).filter(e => !([n1,n2,n3]).includes(e))[~~(Math.random()*(keys-3))];
+				map.notes.push({s: 2*t, l: n1});
+				map.notes.push({s: 2*t, l: n2});
+				map.notes.push({s: 2*t+beatLen/2, l: n3});
+				map.notes.push({s: 2*t+beatLen/2, l: n4});
+				map.notes.push({s: 2*t+beatLen, l: n1});
+				map.notes.push({s: 2*t+beatLen, l: n2});
+				map.notes.push({s: 2*t+3*beatLen/2, l: n3});
+				map.notes.push({s: 2*t+3*beatLen/2, l: n4});
 				break;
 		}
 	}
