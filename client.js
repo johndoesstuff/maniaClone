@@ -169,7 +169,6 @@ window.generateMap = (song, pattern, keys) => {
 				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
 				map.notes.push({s: 2*t+3*beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
 				break;
-				break;
 			case 6: //handstream
 				r = ~~(Math.random()*keys);
 				map.notes.push({s: 2*t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != r)[0]});
@@ -204,6 +203,18 @@ window.generateMap = (song, pattern, keys) => {
 				map.notes.push({s: 2*t+beatLen, l: n2});
 				map.notes.push({s: 2*t+3*beatLen/2, l: n3});
 				map.notes.push({s: 2*t+3*beatLen/2, l: n4});
+				break;
+			case 9: //jumpstream
+				map.notes.push({s: t, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+beatLen/4, l: p});
+				map.notes.push({s: t+beatLen/2, l: ~~(Math.random()*keys)});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+beatLen/2, l: Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))]});
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				map.notes.push({s: t+3*beatLen/4, l: p});
 				break;
 		}
 	}
@@ -415,12 +426,12 @@ function renderScreen() {
 			var s = (-frame/500-1)**4+4;
 			ctx.font = s + "vw Arial"
 			ctx.textAlign = "center";
-			if (lastHit == "miss") ctx.drawImage(skins[skin].hitMiss, window.innerWidth/2 - skins[skin].hitMiss.width/2, window.innerHeight/3 - skins[skin].hitMiss.height/2 + 5*(s-4))
-			if (lastHit == "Max") ctx.drawImage(skins[skin].hitMax, window.innerWidth/2 - skins[skin].hitMax.width/2, window.innerHeight/3 - skins[skin].hitMax.height/2 + 5*(s-4))
-			if (lastHit == "300") ctx.drawImage(skins[skin].hit300, window.innerWidth/2 - skins[skin].hit300.width/2, window.innerHeight/3 - skins[skin].hit300.height/2 + 5*(s-4))
-			if (lastHit == "200") ctx.drawImage(skins[skin].hit200, window.innerWidth/2 - skins[skin].hit200.width/2, window.innerHeight/3 - skins[skin].hit200.height/2 + 5*(s-4))
-			if (lastHit == "100") ctx.drawImage(skins[skin].hit100, window.innerWidth/2 - skins[skin].hit100.width/2, window.innerHeight/3 - skins[skin].hit100.height/2 + 5*(s-4))
-			if (lastHit == "50") ctx.drawImage(skins[skin].hit50, window.innerWidth/2 - skins[skin].hit50.width/2, window.innerHeight/3 - skins[skin].hit50.height/2 + 5*(s-4))
+			if (lastHit == "miss") ctx.drawImage(skins[skin].hitMiss, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hitMiss.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hitMiss.height/2, (1-(s-4)/4)*skins[skin].hitMiss.width, (1-(s-4)/4)*skins[skin].hitMiss.height)
+			if (lastHit == "Max") ctx.drawImage(skins[skin].hitMax, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hitMax.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hitMax.height/2, (1-(s-4)/4)*skins[skin].hitMax.width, (1-(s-4)/4)*skins[skin].hitMax.height)
+			if (lastHit == "300") ctx.drawImage(skins[skin].hit300, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hit300.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hit300.height/2, (1-(s-4)/4)*skins[skin].hit300.width, (1-(s-4)/4)*skins[skin].hit300.height)
+			if (lastHit == "200") ctx.drawImage(skins[skin].hit200, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hit200.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hit200.height/2, (1-(s-4)/4)*skins[skin].hit200.width, (1-(s-4)/4)*skins[skin].hit200.height)
+			if (lastHit == "100") ctx.drawImage(skins[skin].hit100, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hit100.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hit100.height/2, (1-(s-4)/4)*skins[skin].hit100.width, (1-(s-4)/4)*skins[skin].hit100.height)
+			if (lastHit == "50") ctx.drawImage(skins[skin].hit50, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hit50.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hit50.height/2, (1-(s-4)/4)*skins[skin].hit50.width, (1-(s-4)/4)*skins[skin].hit50.height)
 			ctx.fillStyle = "white";
 			ctx.textAlign = "center";
 			var combostr = String(combo);
@@ -529,7 +540,7 @@ function renderScreen() {
 		ctx.fillText("200: " + hits200, 1/3*window.innerWidth, 5/10*window.innerHeight);
 		ctx.fillText("100: " + hits100, 2/3*window.innerWidth, 5/10*window.innerHeight);
 		ctx.fillText("50: " + hits50, 1/3*window.innerWidth, 6/10*window.innerHeight);
-		ctx.fillText("Miss: " + hitsMiss, 2/3*window.innerWidth, 6/10*window.innerHeight);
+		ctx.fillText("Miss:  " + hitsMiss, 2/3*window.innerWidth, 6/10*window.innerHeight);
 	} else {
 		canvas.width = 0;
 		canvas.height = 0;
