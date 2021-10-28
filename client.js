@@ -35,7 +35,7 @@ window.keybinds = {
 	15: "qawerfv njuio;p".split(""),
 	16: "qawserfvnjuilo;p".split(""),
 	17: "qawserfv njuilo;p".split(""),
-	18: "qawsedrfvnjukilo;p".split(""),
+	18: "qawsedrfvnjukilo;p".split(""), //just realized these look like keysmashes dafjklgskdf
 };
 
 window.genSongs = [
