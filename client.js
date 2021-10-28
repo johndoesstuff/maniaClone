@@ -336,6 +336,38 @@ window.generateMap = (song, pattern, keys, bpm) => {
 				map.notes.push({s: t+3*beatLen/4, l: n2});
 				map.notes.push({s: t+3*beatLen/4, l: n3});
 				break;
+			case 19: //running men
+				p = (0 || (map.notes[map.notes.length-1] || []).l + 1) - 1;
+				r = Array(keys).fill(0).map((e,i) => i).filter(e => e != p)[~~(Math.random()*(keys-1))];
+				a = Array(keys).fill(0).map((e,i) => i).filter(e => e != r).sort(() => (Math.random() > .5) ? 1 : -1);
+				map.notes.push({s: 2*t, l: r});
+				map.notes.push({s: 2*t+beatLen/4, l: a[0]});
+				map.notes.push({s: 2*t+2*beatLen/4, l: r});
+				map.notes.push({s: 2*t+3*beatLen/4, l: a[1]});
+				map.notes.push({s: 2*t+4*beatLen/4, l: r});
+				map.notes.push({s: 2*t+5*beatLen/4, l: a[2]});
+				map.notes.push({s: 2*t+6*beatLen/4, l: r});
+				map.notes.push({s: 2*t+7*beatLen/4, l: a[1]});
+				break;
+			case 20: //roll
+				a = Array(keys).fill(0).map((e,i) => i).sort(() => (Math.random() > .5) ? 1 : -1);
+				map.notes.push({s: 4*t, l: a[0]});
+				map.notes.push({s: 4*t+beatLen/4, l: a[1]});
+				map.notes.push({s: 4*t+2*beatLen/4, l: a[2]});
+				map.notes.push({s: 4*t+3*beatLen/4, l: a[3]});
+				map.notes.push({s: 4*t+4*beatLen/4, l: a[0]});
+				map.notes.push({s: 4*t+5*beatLen/4, l: a[1]});
+				map.notes.push({s: 4*t+6*beatLen/4, l: a[2]});
+				map.notes.push({s: 4*t+7*beatLen/4, l: a[3]});
+				map.notes.push({s: 4*t+8*beatLen/4, l: a[0]});
+				map.notes.push({s: 4*t+9*beatLen/4, l: a[1]});
+				map.notes.push({s: 4*t+10*beatLen/4, l: a[2]});
+				map.notes.push({s: 4*t+11*beatLen/4, l: a[3]});
+				map.notes.push({s: 4*t+12*beatLen/4, l: a[0]});
+				map.notes.push({s: 4*t+13*beatLen/4, l: a[1]});
+				map.notes.push({s: 4*t+14*beatLen/4, l: a[2]});
+				map.notes.push({s: 4*t+15*beatLen/4, l: a[3]});
+				break;
 		}
 	}
 	return map;
