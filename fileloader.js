@@ -53,7 +53,7 @@ document.getElementById("map").onchange = async function() {
 				a.ln = ln;
 				console.log(a);
 				a.onclick = (e) => {
-					loadMap(maps[e.srcElement.id], mapAudio);
+					loadMap(maps[e.srcElement.id]);
 				}
 				document.getElementById("diffs").appendChild(a);
 			}

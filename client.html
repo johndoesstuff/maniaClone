@@ -48,7 +48,7 @@
 		.label {
 			font-size: 2.3vw;
 		}
-		input[type="text"] {
+		input[type="number"] {
 			font-family: aller;
 			color: white;
 			background: #1f1f1f;
@@ -57,10 +57,10 @@
 			font-size: 1.5vw;
 			border: none;
 		}
-		input[type="text"]:hover {
+		input[type="number"]:hover {
 			background: #282828;
 		}
-		input[type="text"]:focus {
+		input[type="number"]:focus {
 			background: #282828;
 		}
 		select {
@@ -106,7 +106,7 @@
 	<br><br><br><br>
 	<div id="diffs"></div>
 	<div class="label">Speed</div>
-	<input id="speed" value="1" type="text"></input><br><br>
+	<input id="speed" value="1" type="number"></input><br><br>
 	<div class="label">Mods</div>
 	<input type="checkbox" id="variableSpeed">Variable Speed</input>
 	<input type="checkbox" id="random">Random</input>
@@ -125,7 +125,7 @@
 	<button onclick="changeSkin('hueshift')">Hueshift</button>
 	<button onclick="changeSkin('fnf')">FnF</button><br><br>
 	<div class="label">Scroll Speed</div>
-	<input id="scrollspeed" value="32" type="text"></input>
+	<input id="scrollspeed" value="32" type="number"></input>
 	<button onclick="changeScrollSpeed(document.getElementById('scrollspeed').value)">Update</button><br><br>
 	<div class="label">Generative</div>
 	<select id="patternType">
@@ -159,7 +159,7 @@
 		<option value="3">Nailgun</option>
 		<option value="4">Highscore</option>
 	</select>
-	<input id="patternBpm" type="text" placeholder="BPM (Default)"></input>
+	<input id="patternBpm" type="number" placeholder="BPM (Default)"></input>
 	<button onclick="loadMap(generateMap(Number(document.getElementById('patternSong').value), Number(document.getElementById('patternType').value), 4, Number(document.getElementById('patternBpm').value) || undefined), true)">Start</button><br><br>
 	<script src="client.js"></script>
 	<script src="converter.js"></script>

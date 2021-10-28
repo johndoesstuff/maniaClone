@@ -7,6 +7,16 @@ renderScreen();
 
 skin = (window.location.href.split("skin=")[1] || "").split("&")[0] || "quaver";
 
+document.getElementById("speed").oninput = (e) => {
+	var sp = document.getElementById("speed").value;
+	for (var i = 0; i < document.getElementById("diffs").children.length; i++) {
+		var a = document.getElementById("diffs").children[i];
+		a.innerText = a.key + "K " + a.diff + " | " + round(a.starValue*sp) + "*\nNPS: " + round(a.sampleNps*sp) + "~" + round(a.nps*sp) + " OD: " + a.od + " LN: " + a.ln + "%\n\n";
+	}
+}
+
+var round = (e) => Math.round(e*100)/100
+
 window.keybinds = {
 	1: " ".split(""),
 	2: "dj".split(""),
