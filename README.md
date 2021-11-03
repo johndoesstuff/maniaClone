@@ -16,3 +16,5 @@ takes in .osz files
 * restart without reloading
 
 * forced keymodes
+
+* rework maps to be replayable
