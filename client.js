@@ -693,10 +693,11 @@ function renderScreen() {
 		ctx.fillText("100: " + hits100, 2/3*window.innerWidth, 5/10*window.innerHeight);
 		ctx.fillText("50: " + hits50, 1/3*window.innerWidth, 6/10*window.innerHeight);
 		ctx.fillText("Miss:  " + hitsMiss, 2/3*window.innerWidth, 6/10*window.innerHeight);
+		ctx.fillText("Press ESC to exit", 1/2*window.innerWidth, 7/10*window.innerHeight);
 	} else {
 		canvas.width = 0;
 		canvas.height = 0;
-		document.body.style.overflow = "default";
+		document.body.style.overflowY = "scroll";
 	}
 }
 
@@ -714,8 +715,16 @@ window.onkeydown = e => {
 		return false;
 	}
 	if (e.key == "Escape") {
-		if (audio.paused) audio.play()
-		else audio.pause()
+		if (!resultsScreen) {
+			if (audio.paused) audio.play()
+			else audio.pause()
+		} else {
+			resultsScreen = false;
+			ingame = false;
+			document.body.style.overflowY = "scroll";
+			document.getElementById("notCanvas").style.display = "block";
+			document.getElementById("c").style.display = "none";
+		}
 	}
 	if (keybinds[loadedMap.general.keys].includes(e.key.toLowerCase()) && keysPressed[e.key.toLowerCase()] == 0) {
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
