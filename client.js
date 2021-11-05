@@ -570,7 +570,7 @@ function renderScreen() {
 				ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 			}
 		}
-		if (lastHitT - audio.currentTime*1000 > -500) {
+		if ((lastHitT - audio.currentTime*1000)/audio.playbackRate > -500) {
 			ctx.fillStyle = ({
 				"Max": "#FAF6E6",
 				"300": "#F3DC2A",
