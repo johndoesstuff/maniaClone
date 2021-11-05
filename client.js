@@ -579,7 +579,7 @@ function renderScreen() {
 				"50": "#A345F4",
 				"miss": "#EE1212",
 			})[lastHit]
-			var frame = lastHitT - audio.currentTime*1000;
+			var frame = (lastHitT - audio.currentTime*1000)/audio.playbackRate;
 			var s = (-frame/500-1)**4+4;
 			ctx.font = s + "vw Arial"
 			ctx.textAlign = "center";
@@ -612,7 +612,7 @@ function renderScreen() {
 			ctx.fillStyle = "white";
 			for (var i = 0; i < Math.min(hitTimings.length, 10); i++) {
 				ctx.globalAlpha = (10-i)/10;
-				ctx.fillRect(((hitTimings[i]/window50+1)/2)*(window.innerWidth/10)-window.innerWidth/800+window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/32, window.innerWidth/400, window.innerHeight/16);
+				ctx.fillRect(((hitTimings[i]/window50/audio.playbackRate+1)/2)*(window.innerWidth/10)-window.innerWidth/800+window.innerWidth/2-window.innerWidth/20, (1/2+1/6)*window.innerHeight-window.innerHeight/32, window.innerWidth/400, window.innerHeight/16);
 			}
 			ctx.globalAlpha = 1;
 		} else {
