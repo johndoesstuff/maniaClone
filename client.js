@@ -401,21 +401,17 @@ function loadMap(map, overrideSpeed) {
 	if (enh < 1) {
 		loadedMap.notes = loadedMap.notes.filter(e => Math.random() > enh);
 	} else if (enh > 1) {
-		alert("poo")
-		console.log(loadedMap.notes.length);
 		var o = loadedMap.notes.length*(enh-1);
 		for (var i = 0; i < o; i++) {
 			var n = ~~(Math.random()*loadedMap.notes.length)
 			var t = loadedMap.notes[n].s;
 			var r = ~~(Math.random()*Number(loadedMap.general.keys));
-			console.log(loadedMap.notes.filter(e => e.s == t).map(e => e.l))
 			if (loadedMap.notes.filter(e => e.s == t).map(e => e.l).includes(r)) {
 				i -= 0.9; //only try 10 times per note
 			} else {
 				loadedMap.notes.splice(n, 0, {s: t, l: r});
 			}
 		}
-		console.log(loadedMap.notes.length);
 	}
 	if (document.getElementById("random").checked) {
 		loadedMap.notes.forEach(e=>{e.l+=Number(loadedMap.general.keys)});
@@ -549,7 +545,9 @@ function renderScreen() {
 		}
 		var chunkedOffset = 0;
 		if (chunked) {
-			chunkedOffset = (audio.currentTime*1000 - loadedMap.notes.filter(e => e.s >= audio.currentTime*1000)[0].s)/1000 - 0.25;
+			noteS = loadedMap.notes.filter(e => e.s >= audio.currentTime*1000)[0].s;
+			noteS2 = loadedMap.notes.filter(e => e.s > noteS)[0].s;
+			chunkedOffset = (audio.currentTime*1000 - noteS)/1000 - 0.25 + (noteS - noteS2)/1000;
 		}
 		console.log(chunkedOffset);
 		window.scrollSpeed /= window.audio.playbackRate;
