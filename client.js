@@ -627,7 +627,7 @@ function renderScreen() {
 		ctx.fillStyle = "white";
 		ctx.textAlign = "left";
 		ctx.font = "3vw Arial"
-		ctx.fillText(Math.round(totalAcc/notesHit*10000)/100 + "%", window.innerWidth/8, window.innerHeight/15);
+		ctx.fillText((Math.round(totalAcc/notesHit*10000)/100).toFixed(2) + "%", window.innerWidth/8, window.innerHeight/15);
 		var rank = rankAccs[0][1];
 		for (var i = 0; i < rankAccs.length; i++) {
 			rank = rankAccs[i][1];
@@ -690,7 +690,7 @@ function renderScreen() {
 		ctx.textAlign = "center";
 		ctx.fillStyle = "white";
 		ctx.font = "4vw Arial";
-		ctx.fillText("Accuracy: " + Math.round(totalAcc/notesHit*10000)/100, window.innerWidth/2, 2/10*window.innerHeight);
+		ctx.fillText("Accuracy: " + (Math.round(totalAcc/notesHit*10000)/100).toFixed(2), window.innerWidth/2, 2/10*window.innerHeight);
 		ctx.fillText("Max Combo: " + maxCombo, window.innerWidth/2, 3/10*window.innerHeight);
 		ctx.fillText("Max: " + hitsMax, 1/3*window.innerWidth, 4/10*window.innerHeight);
 		ctx.fillText("300: " + hits300, 2/3*window.innerWidth, 4/10*window.innerHeight);
