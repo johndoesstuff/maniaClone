@@ -549,8 +549,9 @@ function renderScreen() {
 		}
 		var chunkedOffset = 0;
 		if (chunked) {
-			chunkedOffset = (loadedMap.filter(e => e.s >= audio.currentTime*1000)[0].s - audio.currentTime*1000)/1000
+			chunkedOffset = (audio.currentTime*1000 - loadedMap.notes.filter(e => e.s >= audio.currentTime*1000)[0].s)/1000 - 0.25;
 		}
+		console.log(chunkedOffset);
 		window.scrollSpeed /= window.audio.playbackRate;
 		healthAnim = 0.9*healthAnim + 0.1*health;
 		canvas.width = window.innerWidth;
