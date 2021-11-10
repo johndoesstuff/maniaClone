@@ -394,6 +394,7 @@ function loadMap(map, overrideSpeed) {
 	hell = document.getElementById("hell").checked;
 	unreadable = document.getElementById("unreadable").checked;
 	chunked = document.getElementById("chunked").checked;
+	halfChunked = document.getElementById("halfchunked").checked;
 	if (document.getElementById("noln").checked) {
 		loadedMap.notes = loadedMap.notes.map(e => ({s: e.s, l: e.l}));
 	}
@@ -545,11 +546,13 @@ function renderScreen() {
 		}
 		var chunkedOffset = 0;
 		if (chunked) {
-			noteS = loadedMap.notes.filter(e => e.s >= audio.currentTime*1000)[0].s;
-			noteS2 = loadedMap.notes.filter(e => e.s > noteS)[0].s;
-			chunkedOffset = (audio.currentTime*1000 - noteS)/1000 - 0.25 + (noteS - noteS2)/1000;
+			noteS = (loadedMap.notes.filter(e => e.s < audio.currentTime*1000)[loadedMap.notes.filter(e => e.s < audio.currentTime*1000).length-1] || 0).s;
+			chunkedOffset = Math.min((audio.currentTime*1000-noteS)/1000, 0.25);
 		}
-		console.log(chunkedOffset);
+		if (halfChunked) {
+			noteS = (loadedMap.notes.filter(e => e.s < audio.currentTime*1000)[loadedMap.notes.filter(e => e.s < audio.currentTime*1000).length-1] || 0).s;
+			chunkedOffset = Math.min((audio.currentTime*1000-noteS)/1000, 0.5)/2;
+		}
 		window.scrollSpeed /= window.audio.playbackRate;
 		healthAnim = 0.9*healthAnim + 0.1*health;
 		canvas.width = window.innerWidth;
