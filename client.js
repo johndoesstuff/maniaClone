@@ -527,6 +527,7 @@ document.getElementById("speed").onchange = function () {
 
 function renderScreen() {
 	if (ingame) {
+		var filteredNotes = window.loadedMap.notes.filter(e => !e.h);
 		if (combo > maxCombo) maxCombo = combo;
 		document.body.style.overflow = "hidden";
 		document.getElementById("notCanvas").style.display = "none";
@@ -564,8 +565,9 @@ function renderScreen() {
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 		}
-		for (var i = 0; i < Math.min(window.loadedMap.notes.filter(e => !e.h).length, 100); i++) {
-			var note = window.loadedMap.notes.filter(e => !e.h)[i];
+		for (var i = 0; i < Math.min(filteredNotes.length, 100); i++) {
+			filteredNotes = window.loadedMap.notes.filter(e => !e.h); //THIS IS VERY FUCKING IMPORTANT
+			var note = filteredNotes[i];
 			ctx.fillStyle = lnPatterns[skins[skin].keycolors[loadedMap.general.keys][note.l]];
 			ctx.save();
 			ctx.translate(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-(audio.currentTime-chunkedOffset)*1000)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)));
@@ -576,7 +578,7 @@ function renderScreen() {
 			if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
 			ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)
 			if (note.s-audio.currentTime*1000 < -window50 && !note.triggered) {
-				window.loadedMap.notes.filter(e => !e.h)[i].h = true;
+				filteredNotes[i].h = true;
 				i--;
 				lastHit = "miss";
 				if (variableSpeed) audio.playbackRate *= speedAcc(accMiss);
@@ -642,7 +644,7 @@ function renderScreen() {
 		} else {
 			ctx.font = "4vw Arial"
 		}
-		if (loadedMap.notes.filter(e => !e.h)[0] && audio.currentTime*1000+audio.playbackRate*1000 < loadedMap.notes.filter(e => !e.h)[0].s) {
+		if (filteredNotes[0] && audio.currentTime*1000+audio.playbackRate*1000 < filteredNotes[0].s) {
 			ctx.drawImage(skins[skin].skip, window.innerWidth-skins[skin].skip.width, window.innerHeight-skins[skin].skip.height);
 		}
 		ctx.fillStyle = "white";
@@ -683,14 +685,14 @@ function renderScreen() {
 			if (recF > 1) console.log("fps", recF)
 			recF = 0;
 		}
-		if (audio.currentTime == audio.duration || !loadedMap.notes.filter(e => !e.h)[0]) setTimeout(e => {resultsScreen = true; ingame = false}, 500);
+		if (audio.currentTime == audio.duration || !filteredNotes[0]) setTimeout(e => {resultsScreen = true; ingame = false}, 500);
 		ctx.globalAlpha = 0.5;
 		ctx.fillStyle = "white";
 		if (audio.currentTime*1000-startT < 0) {
 			ctx.fillStyle = "#3FE46E";
 			ctx.fillRect(0, 0, audio.currentTime*1000/startT*window.innerWidth, 10);
 		}
-		else if (loadedMap.notes.filter(e => !e.h)[0]) ctx.fillRect(0, 0, (audio.currentTime*1000-startT)/(Math.max(loadedMap.notes.filter(e => !e.h)[loadedMap.notes.filter(e => !e.h).length-1].s, loadedMap.notes.filter(e => !e.h)[loadedMap.notes.filter(e => !e.h).length-1].e || 0) - startT) * window.innerWidth, 10)
+		else if (filteredNotes[0]) ctx.fillRect(0, 0, (audio.currentTime*1000-startT)/(Math.max(filteredNotes[filteredNotes.length-1].s, filteredNotes[filteredNotes.length-1].e || 0) - startT) * window.innerWidth, 10)
 		else ctx.fillRect(0, 0, window.innerWidth, 10);
 		ctx.globalAlpha = 1;
 		var nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+(audio.playbackRate*1e4)).length/10*100)/100;
