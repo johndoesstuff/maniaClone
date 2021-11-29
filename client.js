@@ -6,6 +6,7 @@ var ctx = canvas.getContext("2d");
 renderScreen();
 
 skin = (window.location.href.split("skin=")[1] || "").split("&")[0] || "quaver";
+altControls = "false" != (window.location.href.split("alt=")[1] || "").split("&")[0] || "false";
 
 document.getElementById("speed").oninput = (e) => {
 	var sp = document.getElementById("speed").value * document.getElementById("diffenh").value;
@@ -23,7 +24,7 @@ window.keybinds = {
 	1: " ".split(""),
 	2: "dj".split(""),
 	3: "d j".split(""),
-	4: "dfjk".split(""),
+	4: !altControls ? "dfjk".split("") : "zxcv".split(""),
 	5: "df jk".split(""),
 	6: "sdfjkl".split(""),
 	7: "sdf jkl".split(""),
