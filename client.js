@@ -24,7 +24,8 @@ window.keybinds = {
 	1: " ".split(""),
 	2: "dj".split(""),
 	3: "d j".split(""),
-	4: !altControls ? "dfjk".split("") : "zxcv".split(""),
+	//4: !altControls ? "dfjk".split("") : "zxcv".split(""),
+	4: "dfjk".split(""),
 	5: "df jk".split(""),
 	6: "sdfjkl".split(""),
 	7: "sdf jkl".split(""),
@@ -437,7 +438,7 @@ function loadMap(map, overrideSpeed) {
 }
 
 function makeImg(e) { var img = new Image(); img.src = e; return img; }
-speedAcc = e => (0.00625*e+0.995);
+speedAcc = e => (0.021*e+0.98);
 
 function changeSkin(e) {
 	if (window.location.href.split("skin=")[1]) window.location.href = window.location.href.split("skin=" + skin)[0] + "skin=" + e + window.location.href.split("skin=" + skin)[1];
@@ -500,8 +501,8 @@ var hits50 = 0;
 var hitsMiss = 0;
 var startT = 0;
 var globalVisualOffset = -0.6;
-var variableSpeedMiss = 0.98;
-var variableSpeedMax = 1.005;
+var variableSpeedMiss = 0.9;
+var variableSpeedMax = 1.002;
 var defaultManiaWidth = 380;
 var bottomHeight = 100;
 var noteWidth = 30;
@@ -910,7 +911,6 @@ window.onkeyup = e => {
 	} else if (noteTest > -1 && loadedMap.notes[noteTest].triggered) {
 		if (loadedMap.notes[noteTest].e-audio.currentTime*1000 > 0) {
 			lastHit = "miss";
-			if (variableSpeed) audio.playbackRate *= variableSpeedMiss;
 			health += healthMiss;
 			totalAcc += accMiss;
 			if (variableSpeed) audio.playbackRate *= speedAcc(accMiss);
