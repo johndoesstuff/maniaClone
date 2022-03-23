@@ -19,6 +19,11 @@ document.getElementById("speed").oninput = (e) => {
 document.getElementById("diffenh").oninput = document.getElementById("speed").oninput
 
 var round = (e) => Math.round(e*100)/100
+var rtx = false;
+var rtxCam = {
+	x: 0,
+	y: 0,
+}
 
 window.keybinds = {
 	1: " ".split(""),
@@ -401,6 +406,7 @@ function loadMap(map, overrideSpeed) {
 	if (document.getElementById("noln").checked) {
 		loadedMap.notes = loadedMap.notes.map(e => ({s: e.s, l: e.l}));
 	}
+	rtx = document.getElementById("rtx").checked; 
 	var enh = document.getElementById("diffenh").value;
 	if (enh < 1) {
 		loadedMap.notes = loadedMap.notes.filter(e => Math.random() > enh);
@@ -529,6 +535,8 @@ document.getElementById("speed").onchange = function () {
 	[...document.getElementById("diffs").children].sort((a, b) => (a.starValue+(9999*Number(a.key))) - (b.starValue+(9999*Number(b.key)))).forEach(e=>document.getElementById("diffs").appendChild(e));
 }
 
+nps = 0;
+
 function renderScreen() {
 	if (ingame) {
 		if (combo > maxCombo) maxCombo = combo;
@@ -565,9 +573,22 @@ function renderScreen() {
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 		ctx.fillStyle = skins[skin].bgColor;
 		ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
+		if (rtx) {
+			ctx.save();
+			ctx.translate(rtxCam.x/3, rtxCam.y/3);
+		}
+		if (rtx) {
+			var bg = document.getElementById("rtxbackground");
+			ctx.globalAlpha = 0.5;
+			ctx.drawImage(bg, canvas.width/2-bg.width, canvas.height/2-bg.height, bg.width*2, bg.height*2);
+			ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
+			ctx.globalAlpha = 1;
+		}
+		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 		}
+		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
 		for (var i = 0; i < Math.min(filteredNotes.length, 100); i++) {
 			var note = filteredNotes[i];
 			ctx.fillStyle = lnPatterns[skins[skin].keycolors[loadedMap.general.keys][note.l]];
@@ -577,7 +598,17 @@ function renderScreen() {
 				ctx.fillRect(0, 0, maniaWidth/loadedMap.general.keys, note.triggered ? ((scrollSpeed/20)*(note.e-(audio.currentTime-chunkedOffset)*1000)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2 - ((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset))) : ((scrollSpeed/20)*(note.e-note.s)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2));
 			}
 			ctx.restore();
+			if (rtx) {
+				ctx.shadowBlur = 50;
+				ctx.shadowColor = "black";
+				ctx.shadowOffsetX = 0;
+				ctx.shadowOffsetY = 0;
+			}
 			if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
+			if (rtx) {
+				ctx.shadowBlur = 0;
+				ctx.shadowColor = "transparent";
+			}
 			ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)
 			if (note.s-audio.currentTime*1000 < -window50 && !note.triggered) {
 				filteredNotes[i].h = true;
@@ -594,11 +625,24 @@ function renderScreen() {
 				health = Math.max(health, 0)
 			}
 		}
+		if (rtx) {
+			rtxCam.x /= 1.08;
+			rtxCam.y /= 1.08;
+			ctx.shadowBlur = 50;
+			ctx.shadowColor = "black";
+			ctx.shadowOffsetX = 0;
+			ctx.shadowOffsetY = 0;
+		}
 		if (skins[skin].keyFront) {
 			for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 				ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
 			}
 		}
+		if (rtx) {
+			ctx.shadowBlur = 0;
+			ctx.shadowColor = "transparent";
+		}
+		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
 		if ((lastHitT - audio.currentTime*1000)/audio.playbackRate > -500) {
 			ctx.fillStyle = ({
 				"Max": "#FAF6E6",
@@ -612,6 +656,12 @@ function renderScreen() {
 			var s = (-frame/500-1)**4+4;
 			ctx.font = s + "vw Arial"
 			ctx.textAlign = "center";
+			if (rtx) {
+				ctx.shadowBlur = 25;
+				ctx.shadowColor = "black";
+				ctx.shadowOffsetX = 0;
+				ctx.shadowOffsetY = 0;
+			}
 			if (lastHit == "miss") ctx.drawImage(skins[skin].hitMiss, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hitMiss.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hitMiss.height/2, (1-(s-4)/4)*skins[skin].hitMiss.width, (1-(s-4)/4)*skins[skin].hitMiss.height)
 			if (lastHit == "Max") ctx.drawImage(skins[skin].hitMax, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hitMax.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hitMax.height/2, (1-(s-4)/4)*skins[skin].hitMax.width, (1-(s-4)/4)*skins[skin].hitMax.height)
 			if (lastHit == "300") ctx.drawImage(skins[skin].hit300, window.innerWidth/2 - (1-(s-4)/4)*skins[skin].hit300.width/2, window.innerHeight/3 - (1-(s-4)/4)*skins[skin].hit300.height/2, (1-(s-4)/4)*skins[skin].hit300.width, (1-(s-4)/4)*skins[skin].hit300.height)
@@ -623,6 +673,10 @@ function renderScreen() {
 			var combostr = String(combo);
 			for (var i = 0; i < combostr.length; i++) {
 				ctx.drawImage(skins[skin].combo[Number(combostr[i])], window.innerWidth/2-skins[skin].combo[Number(combostr[i])].width/2 + (i-(combostr.length-1)/2)*skins[skin].combo[Number(combostr[i])].width, (window.innerHeight/2-skins[skin].combo[Number(combostr[i])].height/2)+(1-s/4)*skins[skin].combo[Number(combostr[i])].height/2, skins[skin].combo[Number(combostr[i])].width, s/4*skins[skin].combo[Number(combostr[i])].height);
+			}
+			if (rtx) {
+				ctx.shadowBlur = 0;
+				ctx.shadowColor = "transparent";
 			}
 			ctx.globalAlpha = 1;
 			var size = window.innerWidth/8;
@@ -646,6 +700,9 @@ function renderScreen() {
 			ctx.globalAlpha = 1;
 		} else {
 			ctx.font = "4vw Arial"
+		}
+		if (rtx) {
+			ctx.restore();
 		}
 		if (filteredNotes[0] && audio.currentTime*1000+audio.playbackRate*1000 < filteredNotes[0].s) {
 			ctx.drawImage(skins[skin].skip, window.innerWidth-skins[skin].skip.width, window.innerHeight-skins[skin].skip.height);
@@ -673,7 +730,7 @@ function renderScreen() {
 			ctx.fillRect(window.innerWidth/10-window.innerWidth/50, ((hitTimings[i]/window50+1)/2)*window.innerHeight, window.innerWidth/25, 3);
 		}
 		ctx.globalAlpha = 1;
-		var nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+(audio.playbackRate*1e4)).length/10*100)/100;
+		nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+(audio.playbackRate*1e4)).length/10*100)/100;
 		ctx.fillStyle = "#5c5c5c";
 		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/7.8), 0, window.innerWidth * 1/7.8, window.innerHeight * 1/7.8);
 		ctx.fillStyle = "#212121";
@@ -701,7 +758,7 @@ function renderScreen() {
 		else if (filteredNotes[0]) ctx.fillRect(0, 0, (audio.currentTime*1000-startT)/(Math.max(filteredNotes[filteredNotes.length-1].s, filteredNotes[filteredNotes.length-1].e || 0) - startT) * window.innerWidth, 10)
 		else ctx.fillRect(0, 0, window.innerWidth, 10);
 		ctx.globalAlpha = 1;
-		var nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+(audio.playbackRate*1e4)).length/10*100)/100;
+		nps = Math.round(loadedMap.notes.filter(e => e.s > audio.currentTime*1000 && e.s < audio.currentTime*1000+(audio.playbackRate*1e4)).length/10*100)/100;
 		ctx.fillStyle = "#5c5c5c";
 		ctx.fillRect(window.innerWidth - (window.innerWidth * 1/7.8), 0, window.innerWidth * 1/7.8, window.innerHeight * 1/7.8);
 		ctx.fillStyle = "#212121";
@@ -770,6 +827,12 @@ window.onkeydown = e => {
 	if (keybinds[loadedMap.general.keys].includes(e.key.toLowerCase()) && keysPressed[e.key.toLowerCase()] == 0) {
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == i)[0]);
+		}
+		if (rtx) {
+			var p = 8*20/(nps+5)
+			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][0]) rtxCam.x -= p;
+			else if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][loadedMap.general.keys-1]) rtxCam.x += p;
+			else rtxCam.y += p;
 		}
 		if (noteTest > -1 && Math.abs(loadedMap.notes[noteTest].s-audio.currentTime*1000) < missWindow*window.audio.playbackRate) {
 			if (Math.abs(loadedMap.notes[noteTest].s-audio.currentTime*1000) < window50*window.audio.playbackRate) {
@@ -848,6 +911,11 @@ window.onkeyup = e => {
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 		if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == i)[0]);
 	}
+	/*if (rtx) {
+		if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][0]) rtxCam.x += 10;
+		else if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][loadedMap.general.keys-1]) rtxCam.x -= 10;
+		else if (keybinds[loadedMap.general.keys].includes(e.key.toLowerCase())) rtxCam.y += 10;
+	}*/
 	if (noteTest > -1 && loadedMap.notes[noteTest].triggered && Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < missWindow*window.audio.playbackRate) {
 		if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window50*window.audio.playbackRate) {
 			if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window100*window.audio.playbackRate) {
