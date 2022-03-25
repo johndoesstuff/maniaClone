@@ -407,6 +407,19 @@ function loadMap(map, overrideSpeed) {
 		loadedMap.notes = loadedMap.notes.map(e => ({s: e.s, l: e.l}));
 	}
 	rtx = document.getElementById("rtx").checked; 
+	if (rtx) {
+		noteShadows = [];
+		ctx.shadowBlur = 50;
+		ctx.shadowColor = "black";
+		ctx.shadowOffsetX = 0;
+		ctx.shadowOffsetY = 0;
+		for (var i = 0; i < skins[skin].notes.length; i++) {
+			noteShadows[i] = document.createElement("canvas");
+			noteShadows[i].width = skins[skin].notes[i].note.width + 100;
+			noteShadows[i].height = skins[skin].notes[i].note.height + 100;
+			noteShadows[i].getContext("2d").drawImage(skins[skin].notes[i].note, 50, 50);
+		}
+	}
 	var enh = document.getElementById("diffenh").value;
 	if (enh < 1) {
 		loadedMap.notes = loadedMap.notes.filter(e => Math.random() > enh);
@@ -423,6 +436,7 @@ function loadMap(map, overrideSpeed) {
 			}
 		}
 	}
+	rtxKeys = Array(Number(loadedMap.general.keys)).fill(0);
 	if (document.getElementById("random").checked) {
 		loadedMap.notes.forEach(e=>{e.l+=Number(loadedMap.general.keys)});
 		var rnd = Array(Number(loadedMap.general.keys)).fill(0).map((e,i)=>i).sort(e=>Math.random()-0.5);
@@ -515,6 +529,8 @@ var noteWidth = 30;
 var keysPressed = {};
 var wobble = false;
 var hell = false;
+var missOverlay = 0;
+var rtxKeys = [];
 var npsColors = [
 	[5, "#77f283"],
 	[10, "#9cdb5c"],
@@ -539,6 +555,14 @@ nps = 0;
 
 function renderScreen() {
 	if (ingame) {
+		missOverlay -= 0.03;
+		if (rtx) {
+			for (var i = 0; i < rtxKeys.length; i++) {
+				if (!!keysPressed[keybinds[loadedMap.general.keys][i]]) rtxKeys[i] += 0.05;
+				rtxKeys[i] /= 1.1;
+			}
+		}
+		missOverlay = Math.max(missOverlay, 0);
 		if (combo > maxCombo) maxCombo = combo;
 		document.body.style.overflow = "hidden";
 		document.getElementById("notCanvas").style.display = "none";
@@ -572,7 +596,7 @@ function renderScreen() {
 		ctx.fillStyle = "#000000";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 		ctx.fillStyle = skins[skin].bgColor;
-		ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
+		ctx.fillRect(window.innerWidth/2-maniaWidth/2, -500, maniaWidth, window.innerHeight+1000);
 		if (rtx) {
 			ctx.save();
 			ctx.translate(rtxCam.x/3, rtxCam.y/3);
@@ -581,12 +605,19 @@ function renderScreen() {
 			var bg = document.getElementById("rtxbackground");
 			ctx.globalAlpha = 0.5;
 			ctx.drawImage(bg, canvas.width/2-bg.width, canvas.height/2-bg.height, bg.width*2, bg.height*2);
-			ctx.fillRect(window.innerWidth/2-maniaWidth/2, 0, maniaWidth, window.innerHeight);
+			ctx.fillRect(window.innerWidth/2-maniaWidth/2, -500, maniaWidth, window.innerHeight+1000);
 			ctx.globalAlpha = 1;
 		}
 		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
+			/*if (rtx) {
+				ctx.globalCompositeOperation = "lighten";
+				ctx.globalAlpha = rtxKeys[i]/4;
+				ctx.drawImage(document.getElementById("keyhit"), window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i-document.getElementById("keyhit").width/2+skins[skin].keys[0][!1].width/2, window.innerHeight-bottomHeight-document.getElementById("keyhit").height/2+skins[skin].keys[0][!1].height/2)
+				ctx.globalCompositeOperation = "source-over";
+				ctx.globalAlpha = 1;
+			}*/
 		}
 		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
 		for (var i = 0; i < Math.min(filteredNotes.length, 100); i++) {
@@ -599,12 +630,14 @@ function renderScreen() {
 			}
 			ctx.restore();
 			if (rtx) {
-				ctx.shadowBlur = 50;
+				/*ctx.shadowBlur = 50;
 				ctx.shadowColor = "black";
 				ctx.shadowOffsetX = 0;
-				ctx.shadowOffsetY = 0;
+				ctx.shadowOffsetY = 0;*/
+				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(noteShadows[skins[skin].keycolors[loadedMap.general.keys][note.l]], -50+window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, -50+window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys+100, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width + 100)
+			} else {
+				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
 			}
-			if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
 			if (rtx) {
 				ctx.shadowBlur = 0;
 				ctx.shadowColor = "transparent";
@@ -614,6 +647,7 @@ function renderScreen() {
 				filteredNotes[i].h = true;
 				window.filteredNotes = window.loadedMap.notes.filter(e => !e.h);
 				i--;
+				missOverlay += 0.25;
 				lastHit = "miss";
 				if (variableSpeed) audio.playbackRate *= speedAcc(accMiss);
 				health -= 8;
@@ -643,6 +677,16 @@ function renderScreen() {
 			ctx.shadowColor = "transparent";
 		}
 		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
+		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
+			//ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
+			if (rtx) {
+				ctx.globalCompositeOperation = "lighten";
+				ctx.globalAlpha = rtxKeys[i]/4;
+				ctx.drawImage(document.getElementById("keyhit"), window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i-document.getElementById("keyhit").width/2+skins[skin].keys[0][!1].width/2, window.innerHeight-bottomHeight-document.getElementById("keyhit").height/2+skins[skin].keys[0][!1].height/2)
+				ctx.globalCompositeOperation = "source-over";
+				ctx.globalAlpha = 1;
+			}
+		}
 		if ((lastHitT - audio.currentTime*1000)/audio.playbackRate > -500) {
 			ctx.fillStyle = ({
 				"Max": "#FAF6E6",
@@ -702,6 +746,12 @@ function renderScreen() {
 			ctx.font = "4vw Arial"
 		}
 		if (rtx) {
+			ctx.translate(2*rtxCam.x, 2*rtxCam.y);
+			ctx.globalCompositeOperation = "lighten";
+			//0.5*rtxKeys.reduce((e, a) => e + a, 0)/rtxKeys.length
+			ctx.globalAlpha = 0.25+0.5*rtxKeys.reduce((e, a) => e + a, 0)/rtxKeys.length;
+			ctx.drawImage(document.getElementById("flare"), -document.getElementById("flare").width/6, -document.getElementById("flare").height/6);
+			ctx.globalCompositeOperation = "source-over";
 			ctx.restore();
 		}
 		if (filteredNotes[0] && audio.currentTime*1000+audio.playbackRate*1000 < filteredNotes[0].s) {
@@ -773,6 +823,15 @@ function renderScreen() {
 		ctx.textAlign = "center";
 		ctx.fillStyle = speedColors.filter(e => e[0] > audio.playbackRate)[0][1];
 		ctx.fillText(Math.round(100*audio.playbackRate)/100 + "x", window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/9 );
+		if (rtx) {
+			ctx.globalAlpha = missOverlay;
+			ctx.globalCompositeOperation = "lighten";
+			ctx.drawImage(document.getElementById("missoverlay"), 0, 0, canvas.width, canvas.height);
+			ctx.globalCompositeOperation = "source-over";
+			ctx.globalAlpha = (100-health)/100
+			ctx.drawImage(document.getElementById("edge"), 0, 0, canvas.width, canvas.height);
+			ctx.globalAlpha = 1;
+		}
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
@@ -829,10 +888,11 @@ window.onkeydown = e => {
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == i)[0]);
 		}
 		if (rtx) {
-			var p = 8*20/(nps+5)
+			var p = 8*20/(10+5)
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][0]) rtxCam.x -= p;
 			else if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][loadedMap.general.keys-1]) rtxCam.x += p;
 			else rtxCam.y += p;
+			rtxKeys[keybinds[loadedMap.general.keys].indexOf(e.key.toLowerCase())] = 1;
 		}
 		if (noteTest > -1 && Math.abs(loadedMap.notes[noteTest].s-audio.currentTime*1000) < missWindow*window.audio.playbackRate) {
 			if (Math.abs(loadedMap.notes[noteTest].s-audio.currentTime*1000) < window50*window.audio.playbackRate) {
@@ -883,6 +943,7 @@ window.onkeydown = e => {
 				hitTimings.unshift(loadedMap.notes[noteTest].s-audio.currentTime*1000);
 				if (hitTimings.length >= 50) hitTimings.pop();
 			} else {
+				missOverlay += 0.25;
 				lastHit = "miss";
 				health += healthMiss;
 				totalAcc += accMiss;
@@ -978,6 +1039,7 @@ window.onkeyup = e => {
 		window.filteredNotes = window.loadedMap.notes.filter(e => !e.h);
 	} else if (noteTest > -1 && loadedMap.notes[noteTest].triggered) {
 		if (loadedMap.notes[noteTest].e-audio.currentTime*1000 > 0) {
+			missOverlay += 0.25;
 			lastHit = "miss";
 			health += healthMiss;
 			totalAcc += accMiss;
