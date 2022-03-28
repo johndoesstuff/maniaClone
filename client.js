@@ -392,6 +392,71 @@ window.rankAccs = [
 ];
 
 function loadMap(map, overrideSpeed) {
+	document.getElementById("c").style.display = "block";
+	recF = 0;
+	od = 8;
+	missWindow = 188 - 3*od;
+	window50 = 151 - 3*od;
+	window100 = 127 - 3*od;
+	window200 = 97 - 3*od;
+	window300 = 64 - 3*od;
+	windowMax = 40 - 3*od;
+	healthMax = 1;
+	health300 = 0.7;
+	health200 = 0.1;
+	health100 = -0.2;
+	health50 = -0.4;
+	healthMiss = -6;
+	totalAcc = 1e-100;
+	notesHit = 1e-100;
+	accMax = 1;
+	acc300 = 1;
+	acc200 = 2/3;
+	acc100 = 1/3;
+	acc50 = 1/6;
+	accMiss = 0;
+	lastHit = "";
+	lastHitT = 0;
+	health = 100;
+	healthAnim = 100;
+	combo = 0;
+	hitTimings = [];
+	ingame = false;
+	resultsScreen = false;
+	maxCombo = 0;
+	hitsMax = 0;
+	hits300 = 0;
+	hits200 = 0;
+	hits100 = 0;
+	hits50 = 0;
+	hitsMiss = 0;
+	startT = 0;
+	globalVisualOffset = -0.6;
+	variableSpeedMiss = 0.9;
+	variableSpeedMax = 1.002;
+	defaultManiaWidth = 380;
+	bottomHeight = 100;
+	noteWidth = 30;
+	keysPressed = {};
+	wobble = false;
+	hell = false;
+	missOverlay = 0;
+	rtxKeys = [];
+	npsColors = [
+		[5, "#77f283"],
+		[10, "#9cdb5c"],
+		[15, "#dbce5c"],
+		[20, "#db8942"],
+		[Infinity, "#db5442"],
+	];
+	speedColors = [
+		[0.5, "#77f283"],
+		[0.75, "#9cdb5c"],
+		[1, "#dbce5c"],
+		[1.5, "#db8942"],
+		[Infinity, "#db5442"],
+	];
+	window.fps = 0;
 	ingame = true;
 	window.loadedMap = map;
 	window.filteredNotes = window.loadedMap.notes.filter(e => !e.h);
@@ -407,6 +472,7 @@ function loadMap(map, overrideSpeed) {
 		loadedMap.notes = loadedMap.notes.map(e => ({s: e.s, l: e.l}));
 	}
 	rtx = document.getElementById("rtx").checked; 
+	anime = document.getElementById("anime").checked; 
 	if (rtx) {
 		noteShadows = [];
 		ctx.shadowBlur = 50;
@@ -531,6 +597,8 @@ var wobble = false;
 var hell = false;
 var missOverlay = 0;
 var rtxKeys = [];
+var pauseAnim = 0;
+var paused = false;
 var npsColors = [
 	[5, "#77f283"],
 	[10, "#9cdb5c"],
@@ -555,6 +623,8 @@ nps = 0;
 
 function renderScreen() {
 	if (ingame) {
+		if (paused) pauseAnim = 0.8*pauseAnim + 0.2;
+		else pauseAnim = 0.8*pauseAnim;
 		missOverlay -= 0.03;
 		if (rtx) {
 			for (var i = 0; i < rtxKeys.length; i++) {
@@ -608,32 +678,30 @@ function renderScreen() {
 			ctx.fillRect(window.innerWidth/2-maniaWidth/2, -500, maniaWidth, window.innerHeight+1000);
 			ctx.globalAlpha = 1;
 		}
-		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
+		if (rtx) {
+			ctx.translate(rtxCam.x/3, rtxCam.y/3);
+			ctx.globalCompositeOperation = "lighten";
+			ctx.globalAlpha = rtxKeys.sort((a, b) => b-a)[0] * rtxKeys.sort((a, b) => b-a)[1] * 0.1;
+			ctx.drawImage(document.getElementById("grunge"), -canvas.width*0.05, -canvas.height*0.05, canvas.width*1.1, canvas.height*1.1);
+			ctx.globalCompositeOperation = "source-over";
+			ctx.globalAlpha = 1;
+		}
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			ctx.drawImage(skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]], window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i, window.innerHeight-bottomHeight, maniaWidth/loadedMap.general.keys, skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].height * (maniaWidth/loadedMap.general.keys/skins[skin].keys[skins[skin].keycolors[loadedMap.general.keys][i]][!!keysPressed[keybinds[loadedMap.general.keys][i]]].width))
-			/*if (rtx) {
-				ctx.globalCompositeOperation = "lighten";
-				ctx.globalAlpha = rtxKeys[i]/4;
-				ctx.drawImage(document.getElementById("keyhit"), window.innerWidth/2-maniaWidth/2+maniaWidth/loadedMap.general.keys*i-document.getElementById("keyhit").width/2+skins[skin].keys[0][!1].width/2, window.innerHeight-bottomHeight-document.getElementById("keyhit").height/2+skins[skin].keys[0][!1].height/2)
-				ctx.globalCompositeOperation = "source-over";
-				ctx.globalAlpha = 1;
-			}*/
 		}
 		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
-		for (var i = 0; i < Math.min(filteredNotes.length, 100); i++) {
+		var notesOnScreen = filteredNotes.filter((e) => e.s < (audio.currentTime-chunkedOffset)*1000 + 1000).length;
+		for (var i = 0; i < Math.min(notesOnScreen, filteredNotes.length, 100); i++) {
 			var note = filteredNotes[i];
 			ctx.fillStyle = lnPatterns[skins[skin].keycolors[loadedMap.general.keys][note.l]];
 			ctx.save();
 			ctx.translate(window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.e-(audio.currentTime-chunkedOffset)*1000)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)));
+			ctx.globalCompositeOperation = "source-over";
 			if (note.e) {
 				ctx.fillRect(0, 0, maniaWidth/loadedMap.general.keys, note.triggered ? ((scrollSpeed/20)*(note.e-(audio.currentTime-chunkedOffset)*1000)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2 - ((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset))) : ((scrollSpeed/20)*(note.e-note.s)-(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].end.width)+(maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)/2));
 			}
 			ctx.restore();
 			if (rtx) {
-				/*ctx.shadowBlur = 50;
-				ctx.shadowColor = "black";
-				ctx.shadowOffsetX = 0;
-				ctx.shadowOffsetY = 0;*/
 				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(noteShadows[skins[skin].keycolors[loadedMap.general.keys][note.l]], -50+window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, -50+window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys+100, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width + 100)
 			} else {
 				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
@@ -745,10 +813,16 @@ function renderScreen() {
 		} else {
 			ctx.font = "4vw Arial"
 		}
+		if (rtx && anime) {
+			ctx.globalAlpha = 1;
+			ctx.drawImage(document.getElementById("boy"), 2*canvas.width/3, canvas.height/3, 2*canvas.height/3/document.getElementById("boy").height*document.getElementById("boy").width, 2*canvas.height/3);
+			ctx.globalAlpha = 1;
+			ctx.drawImage(document.getElementById("girl"), 0.2*canvas.width/3, canvas.height/3, 2*canvas.height/3/document.getElementById("girl").height*document.getElementById("girl").width, 2*canvas.height/3);
+			ctx.globalAlpha = 1;
+		}
 		if (rtx) {
 			ctx.translate(2*rtxCam.x, 2*rtxCam.y);
 			ctx.globalCompositeOperation = "lighten";
-			//0.5*rtxKeys.reduce((e, a) => e + a, 0)/rtxKeys.length
 			ctx.globalAlpha = 0.25+0.5*rtxKeys.reduce((e, a) => e + a, 0)/rtxKeys.length;
 			ctx.drawImage(document.getElementById("flare"), -document.getElementById("flare").width/6, -document.getElementById("flare").height/6);
 			ctx.globalCompositeOperation = "source-over";
@@ -789,7 +863,6 @@ function renderScreen() {
 		ctx.fillStyle = npsColors.filter(e => e[0] > nps)[0][1];
 		ctx.font = "5vw Arial";
 		ctx.fillText(nps, window.innerWidth - (window.innerWidth * 1/16), window.innerHeight * 1/10);
-		requestAnimationFrame(renderScreen);
 		recF++;
 		if (new Date().getTime() % 2000 > 1000) {
 			if (recF > 1) {
@@ -832,6 +905,24 @@ function renderScreen() {
 			ctx.drawImage(document.getElementById("edge"), 0, 0, canvas.width, canvas.height);
 			ctx.globalAlpha = 1;
 		}
+		if (pauseAnim > 0.01) {
+			ctx.globalAlpha = pauseAnim;
+			ctx.drawImage(document.getElementById("pause"), 0, canvas.height*(1-pauseAnim), canvas.width, canvas.height);
+			ctx.textAlign = "center";
+			ctx.fillStyle = "white";
+			ctx.font = "4vw Arial";
+			ctx.shadowBlur = 50;
+			ctx.shadowColor = "black";
+			ctx.shadowOffsetX = 0;
+			ctx.shadowOffsetY = 0;
+			ctx.fillText("Paused", canvas.width/2, pauseAnim*canvas.height/4);
+			ctx.fillText("Continue (esc)", canvas.width/2, pauseAnim*2*canvas.height/4);
+			ctx.fillText("Menu (enter)", canvas.width/2, pauseAnim*3*canvas.height/4);
+			ctx.shadowBlur = 0;
+			ctx.shadowColor = "transparent";
+			ctx.globalAlpha = 1;
+		}
+		requestAnimationFrame(renderScreen);
 	} else if (resultsScreen) {
 		document.getElementById("notCanvas").style.display = "none";
 		document.body.style.overflow = "hidden";
@@ -855,6 +946,8 @@ function renderScreen() {
 		canvas.width = 0;
 		canvas.height = 0;
 		document.body.style.overflowY = "scroll";
+		ctx.fillStyle = "red";
+		ctx.fillRect(50, 50, 500, 500)
 	}
 }
 
@@ -866,24 +959,30 @@ for (var i = 0; i < Object.keys(keybinds).length; i++) {
 
 window.onkeydown = e => {
 	if (e.key == "Enter") {
-		if (audio.currentTime*1000+audio.playbackRate*500 < loadedMap.notes.filter(e => !e.h)[0].s) audio.currentTime = loadedMap.notes.filter(e => !e.h)[0].s/1000-0.5*audio.playbackRate;
+		if (!audio.paused && audio.currentTime*1000+audio.playbackRate*500 < loadedMap.notes.filter(e => !e.h)[0].s) audio.currentTime = loadedMap.notes.filter(e => !e.h)[0].s/1000-0.5*audio.playbackRate;
 	}
 	if (e.key == "Tab") {
 		return false;
 	}
 	if (e.key == "Escape") {
 		if (!resultsScreen) {
-			if (audio.paused) audio.play()
-			else audio.pause()
+			if (paused) {
+				paused = false;
+				setTimeout(() => audio.play(), 500);
+			} else {
+				paused = true;
+				audio.pause()
+			}
 		} else {
 			resultsScreen = false;
 			ingame = false;
 			document.body.style.overflowY = "scroll";
+			document.getElementById("diffs").innerHTML = "";
 			document.getElementById("notCanvas").style.display = "block";
 			document.getElementById("c").style.display = "none";
 		}
 	}
-	if (keybinds[loadedMap.general.keys].includes(e.key.toLowerCase()) && keysPressed[e.key.toLowerCase()] == 0) {
+	if (!audio.paused && keybinds[loadedMap.general.keys].includes(e.key.toLowerCase()) && keysPressed[e.key.toLowerCase()] == 0) {
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == i)[0]);
 		}
@@ -972,11 +1071,6 @@ window.onkeyup = e => {
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 		if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == i)[0]);
 	}
-	/*if (rtx) {
-		if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][0]) rtxCam.x += 10;
-		else if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][loadedMap.general.keys-1]) rtxCam.x -= 10;
-		else if (keybinds[loadedMap.general.keys].includes(e.key.toLowerCase())) rtxCam.y += 10;
-	}*/
 	if (noteTest > -1 && loadedMap.notes[noteTest].triggered && Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < missWindow*window.audio.playbackRate) {
 		if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window50*window.audio.playbackRate) {
 			if (Math.abs(loadedMap.notes[noteTest].e-audio.currentTime*1000) < window100*window.audio.playbackRate) {
