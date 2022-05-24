@@ -465,6 +465,7 @@ function loadMap(map, overrideSpeed) {
 	variableSpeed = document.getElementById("variableSpeed").checked;
 	wobble = document.getElementById("wobble").checked;
 	hell = document.getElementById("hell").checked;
+	oneNote = document.getElementById("onno").checked;
 	unreadable = document.getElementById("unreadable").checked;
 	chunked = document.getElementById("chunked").checked;
 	halfChunked = document.getElementById("halfchunked").checked;
@@ -508,6 +509,11 @@ function loadMap(map, overrideSpeed) {
 		var rnd = Array(Number(loadedMap.general.keys)).fill(0).map((e,i)=>i).sort(e=>Math.random()-0.5);
 		loadedMap.notes.forEach(e=>{e.l = rnd[e.l-Number(loadedMap.general.keys)]});
 	}
+	if (oneNote) {
+		loadedMap.notes.forEach(e=>{e.l=0});
+		loadedMap.general.keys = 1;
+		loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+	}
 	od = window.loadedMap.general.od;
 	updateWindows();
 	if (!overrideSpeed) window.audio.playbackRate = Number(document.getElementById("speed").value)
@@ -520,6 +526,10 @@ function loadMap(map, overrideSpeed) {
 	lnCanvases.forEach((e, i) => e.height = Math.floor(e.width*skins[skin].notes[i].mid.height/skins[skin].notes[i].mid.width));
 	lnCanvases.forEach((e, i) => e.getContext("2d").drawImage(skins[skin].notes[i].mid, 0, 0, e.width, e.height));
 	window.lnPatterns = Array(lnCanvases.length).fill(0).map((e, i) => ctx.createPattern(lnCanvases[i], "repeat-y"));
+	if (document.getElementById("noln").checked) {
+		loadedMap.notes = loadedMap.notes.map(e => ({s: e.s, l: e.l}));
+	}
+	window.filteredNotes = window.loadedMap.notes.filter(e => !e.h);
 	renderScreen();
 }
 
@@ -691,6 +701,10 @@ function renderScreen() {
 		}
 		if (rtx) ctx.translate(rtxCam.x/3, rtxCam.y/3);
 		var notesOnScreen = filteredNotes.filter((e) => e.s < (audio.currentTime-chunkedOffset)*1000 + 1000).length;
+		var noteYfunc = (e) => e;
+		if (document.getElementById("sqrt").checked) {
+			noteYfunc = (e) => 750*(e/750)**(1.04/2);
+		}
 		for (var i = 0; i < Math.min(notesOnScreen, filteredNotes.length, 100); i++) {
 			var note = filteredNotes[i];
 			ctx.fillStyle = lnPatterns[skins[skin].keycolors[loadedMap.general.keys][note.l]];
@@ -702,9 +716,9 @@ function renderScreen() {
 			}
 			ctx.restore();
 			if (rtx) {
-				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(noteShadows[skins[skin].keycolors[loadedMap.general.keys][note.l]], -50+window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, -50+window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys+100, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width + 100)
+				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(noteShadows[skins[skin].keycolors[loadedMap.general.keys][note.l]], -50+window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, -50+window.innerHeight-(scrollSpeed/20)*noteYfunc(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys+100, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width + 100)
 			} else {
-				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
+				if (!note.triggered || note.s > (audio.currentTime-chunkedOffset)*1000) ctx.drawImage(skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note, window.innerWidth/2-maniaWidth/2 + maniaWidth/loadedMap.general.keys*note.l, window.innerHeight-(scrollSpeed/20)*noteYfunc(note.s-(audio.currentTime-chunkedOffset)*1000)-((maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)*(globalVisualOffset + skins[skin].offset)), maniaWidth/loadedMap.general.keys, maniaWidth/loadedMap.general.keys*skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.height/skins[skin].notes[skins[skin].keycolors[loadedMap.general.keys][note.l]].note.width)
 			}
 			if (rtx) {
 				ctx.shadowBlur = 0;
@@ -982,10 +996,12 @@ window.onkeydown = e => {
 			document.getElementById("c").style.display = "none";
 		}
 	}
-	if (!audio.paused && keybinds[loadedMap.general.keys].includes(e.key.toLowerCase()) && keysPressed[e.key.toLowerCase()] == 0) {
+	if (!audio.paused && (oneNote || keybinds[loadedMap.general.keys].includes(e.key.toLowerCase())) && (oneNote || keysPressed[e.key.toLowerCase()] == 0)) {
 		for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == i)[0]);
 		}
+		if (oneNote) noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == 0)[0]);
+		console.log(noteTest);
 		if (rtx) {
 			var p = 8*20/(10+5)
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][0]) rtxCam.x -= p;
@@ -1064,7 +1080,9 @@ window.onkeydown = e => {
 	}
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 		if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) keysPressed[keybinds[loadedMap.general.keys][i]] = 1;
+		if (oneNote) keysPressed[" "] = 1;
 	}
+	if (noln) window.filteredNotes = window.loadedMap.notes.filter(e => !e.h);
 }
 
 window.onkeyup = e => {
@@ -1156,5 +1174,6 @@ window.onkeyup = e => {
 	}
 	for (var i = 0; i < keybinds[loadedMap.general.keys].length; i++) {
 		if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) keysPressed[keybinds[loadedMap.general.keys][i]] = 0;
+		if (oneNote) keysPressed[" "] = 0;
 	}
 }
