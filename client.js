@@ -512,7 +512,7 @@ function loadMap(map, overrideSpeed) {
 	if (oneNote) {
 		loadedMap.notes.forEach(e=>{e.l=0});
 		loadedMap.general.keys = 1;
-		loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+		loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
 	}
 	od = window.loadedMap.general.od;
 	updateWindows();
