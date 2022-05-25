@@ -466,6 +466,9 @@ function loadMap(map, overrideSpeed) {
 	wobble = document.getElementById("wobble").checked;
 	hell = document.getElementById("hell").checked;
 	oneNote = document.getElementById("onno").checked;
+	r4k = document.getElementById("r4k").checked;
+	r6k = document.getElementById("r6k").checked;
+	r8k = document.getElementById("r8k").checked;
 	unreadable = document.getElementById("unreadable").checked;
 	chunked = document.getElementById("chunked").checked;
 	halfChunked = document.getElementById("halfchunked").checked;
@@ -513,6 +516,24 @@ function loadMap(map, overrideSpeed) {
 		loadedMap.notes.forEach(e=>{e.l=0});
 		loadedMap.general.keys = 1;
 		loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+	}
+	if (r4k) {
+		loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+		loadedMap.notes.forEach((e,i)=>{e.l=([0,1,3,2])[i%4]});
+		loadedMap.general.keys = "4";
+		//loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+	}
+	if (r6k) {
+		loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+		loadedMap.notes.forEach((e,i)=>{e.l=([0,1,2,5,4,3])[i%6]});
+		loadedMap.general.keys = "6";
+		//loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+	}
+	if (r8k) {
+		loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
+		loadedMap.notes.forEach((e,i)=>{e.l=([0,1,2,3,7,6,5,4])[i%8]});
+		loadedMap.general.keys = "8";
+		//loadedMap.notes = loadedMap.notes.filter((e,i,a) => e.s > a[Math.max(0,i-1)].s);
 	}
 	od = window.loadedMap.general.od;
 	updateWindows();
@@ -1001,7 +1022,6 @@ window.onkeydown = e => {
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][i]) var noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == i)[0]);
 		}
 		if (oneNote) noteTest = loadedMap.notes.indexOf(loadedMap.notes.filter(e => !e.h).filter(e => e.l == 0)[0]);
-		console.log(noteTest);
 		if (rtx) {
 			var p = 8*20/(10+5)
 			if (e.key.toLowerCase() == keybinds[loadedMap.general.keys][0]) rtxCam.x -= p;
